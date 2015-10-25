@@ -1,17 +1,20 @@
 package group.cs242.beatblocks;
 
-import android.util.Log;
-
 import java.util.List;
-import java.util.Random;
+
 /**
- * Created by Hunter on 10/25/2015.
+ * @author Hunter Quant <quanthd@clarkson.edu> <hunterdquant@gmail.com>
+ *
+ * Serves as a template for game boards.
  */
 abstract class GameBoard {
 
+    /* data members */
     protected byte [][] board;
+
+    /* protected abstract methods */
 
     protected abstract void populate();
     protected abstract void checkMatches();
-    protected abstract void removeMatches(List<BeatBlockBoard.Index> matchedIndices);
+    protected abstract void removeMatches(List<Index> matchedIndices);
 }

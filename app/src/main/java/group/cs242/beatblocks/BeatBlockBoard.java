@@ -5,17 +5,118 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Hunter on 10/25/2015.
+ * @author Hunter Quant <quanthd@clarkson.edu> <hunterdquant@gmail.com>
+ *
+ * This class serves as a backend framework for the interactive game board for Beat Blocks.
  */
-public class BeatBlockBoard extends GameBoard{
+public class BeatBlockBoard extends GameBoard {
 
+    /* constructors */
     public BeatBlockBoard() {
         board = new byte[7][7];
+        populate();
     }
 
+    /* public methods */
+
+    /**
+     *
+     * @param i - The index to move up.
+     */
+    public void moveBlockUp(Index i) {
+        if (!validBounds(i)) {
+            return;
+        }
+        if (i.getJ() - 1 < 0) {
+            return;
+        }
+        try {
+            byte temp = board[i.getI()][i.getJ()-1];
+            board[i.getI()][i.getJ()-1] = board[i.getI()][i.getJ()];
+            board[i.getI()][i.getJ()] = temp;
+        } catch (Exception e) {
+            System.err.println("Unexpected error");
+            e.printStackTrace();
+        }
+        checkMatches();
+    }
+
+    /**
+     *
+     * @param i - The index to move right.
+     */
+    public void moveBlockRight(Index i) {
+        if (!validBounds(i)) {
+            return;
+        }
+        if (i.getI() + 1 > board.length - 1) {
+            return;
+        }
+        try {
+            byte temp = board[i.getI()+1][i.getJ()];
+            board[i.getI()+1][i.getJ()] = board[i.getI()][i.getJ()];
+            board[i.getI()][i.getJ()] = temp;
+        } catch (Exception e) {
+            System.err.println("Unexpected error");
+            e.printStackTrace();
+        }
+        checkMatches();
+    }
+
+
+    /**
+     *
+     * @param i - The index to move down.
+     */
+    public void moveBlockDown(Index i) {
+        if (!validBounds(i)) {
+            return;
+        }
+        if (i.getJ() + 1 > board.length - 1) {
+            return;
+        }
+        try {
+            byte temp = board[i.getI()][i.getJ()+1];
+            board[i.getI()][i.getJ()+1] = board[i.getI()][i.getJ()];
+            board[i.getI()][i.getJ()] = temp;
+        } catch (Exception e) {
+            System.err.println("Unexpected error");
+            e.printStackTrace();
+        }
+        checkMatches();
+    }
+
+    /**
+     *
+     * @param i - The index to move left.
+     */
+    public void moveBlockLeft(Index i) {
+        if (!validBounds(i)) {
+            return;
+        }
+        if (i.getI() - 1 < 0) {
+            return;
+        }
+        try {
+            byte temp = board[i.getI()-1][i.getJ()];
+            board[i.getI()-1][i.getJ()] = board[i.getI()][i.getJ()];
+            board[i.getI()][i.getJ()] = temp;
+        } catch (Exception e) {
+            System.err.println("Unexpected error");
+            e.printStackTrace();
+        }
+        checkMatches();
+    }
+
+    /* protected methods */
+
+    /**
+     * Populates all empty indices of the game board.
+     */
     protected void populate() {
         Random rand = new Random();
         try {
+            //Randomly populate each element of the game board.
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board[0].length; j++) {
                     if (board[i][j] != 0) continue;
@@ -28,12 +129,17 @@ public class BeatBlockBoard extends GameBoard{
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
+        //After population check for matches on the board.
         checkMatches();
     }
 
+    /**
+     * Finds all matches of 3+ on the game board.
+     */
     protected void checkMatches() {
         List<Index> matchedIndices = new ArrayList<Index>();
         try {
+            //Add all indices in a 3+ match.
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board[0].length; j++) {
                     if (i > 1) {
@@ -56,27 +162,40 @@ public class BeatBlockBoard extends GameBoard{
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
+        //After finding the matches, remove the elements at the matched indices.
+        removeMatches(matchedIndices);
     }
 
+    /**
+     * @param matchedIndices - A list of element indices to remove.
+     *
+     * Sets all matched indices to zero, then calls for a repopulate.
+     */
     protected void removeMatches(List<Index> matchedIndices) {
-
+        if (matchedIndices.size() == 0) {
+            return;
+        }
+        try {
+            for (Index i : matchedIndices) {
+                board[i.getI()][i.getJ()] = 0;
+            }
+        } catch (Exception e) {
+            System.err.println("Unexpected error");
+            e.printStackTrace();
+        }
+        //Repopulate.
+        populate();
     }
 
-    class Index {
-        private int i;
-        private int j;
+    /* private methods */
 
-        private Index(int i, int j) {
-            this.i = i;
-            this.j = j;
+    private boolean validBounds (Index i) {
+        if (i.getI() < 0 || i.getI() > board.length - 1) {
+            return false;
         }
-
-        private int getI() {
-            return i;
+        if (i.getJ() < 0 || i.getJ() > board.length - 1) {
+            return false;
         }
-
-        private int getJ() {
-            return j;
-        }
+        return true;
     }
 }
