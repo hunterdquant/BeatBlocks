@@ -13,7 +13,7 @@ public class BeatBlockBoard extends GameBoard {
 
     /* constructors */
     public BeatBlockBoard() {
-        board = new byte[7][7];
+        board = new byte[WIDTH][HEIGHT];
         populate();
     }
 
@@ -27,13 +27,13 @@ public class BeatBlockBoard extends GameBoard {
         if (!validBounds(i)) {
             return;
         }
-        if (i.getJ() - 1 < 0) {
+        if (i.getY() - 1 < 0) {
             return;
         }
         try {
-            byte temp = board[i.getI()][i.getJ()-1];
-            board[i.getI()][i.getJ()-1] = board[i.getI()][i.getJ()];
-            board[i.getI()][i.getJ()] = temp;
+            byte temp = board[i.getX()][i.getY()-1];
+            board[i.getX()][i.getY()-1] = board[i.getX()][i.getY()];
+            board[i.getX()][i.getY()] = temp;
         } catch (Exception e) {
             System.err.println("Unexpected error");
             e.printStackTrace();
@@ -49,13 +49,13 @@ public class BeatBlockBoard extends GameBoard {
         if (!validBounds(i)) {
             return;
         }
-        if (i.getI() + 1 > board.length - 1) {
+        if (i.getX() + 1 > board.length - 1) {
             return;
         }
         try {
-            byte temp = board[i.getI()+1][i.getJ()];
-            board[i.getI()+1][i.getJ()] = board[i.getI()][i.getJ()];
-            board[i.getI()][i.getJ()] = temp;
+            byte temp = board[i.getX()+1][i.getY()];
+            board[i.getX()+1][i.getY()] = board[i.getX()][i.getY()];
+            board[i.getX()][i.getY()] = temp;
         } catch (Exception e) {
             System.err.println("Unexpected error");
             e.printStackTrace();
@@ -72,13 +72,13 @@ public class BeatBlockBoard extends GameBoard {
         if (!validBounds(i)) {
             return;
         }
-        if (i.getJ() + 1 > board.length - 1) {
+        if (i.getY() + 1 > board.length - 1) {
             return;
         }
         try {
-            byte temp = board[i.getI()][i.getJ()+1];
-            board[i.getI()][i.getJ()+1] = board[i.getI()][i.getJ()];
-            board[i.getI()][i.getJ()] = temp;
+            byte temp = board[i.getX()][i.getY()+1];
+            board[i.getX()][i.getY()+1] = board[i.getX()][i.getY()];
+            board[i.getX()][i.getY()] = temp;
         } catch (Exception e) {
             System.err.println("Unexpected error");
             e.printStackTrace();
@@ -94,13 +94,13 @@ public class BeatBlockBoard extends GameBoard {
         if (!validBounds(i)) {
             return;
         }
-        if (i.getI() - 1 < 0) {
+        if (i.getX() - 1 < 0) {
             return;
         }
         try {
-            byte temp = board[i.getI()-1][i.getJ()];
-            board[i.getI()-1][i.getJ()] = board[i.getI()][i.getJ()];
-            board[i.getI()][i.getJ()] = temp;
+            byte temp = board[i.getX()-1][i.getY()];
+            board[i.getX()-1][i.getY()] = board[i.getX()][i.getY()];
+            board[i.getX()][i.getY()] = temp;
         } catch (Exception e) {
             System.err.println("Unexpected error");
             e.printStackTrace();
@@ -177,7 +177,7 @@ public class BeatBlockBoard extends GameBoard {
         }
         try {
             for (Index i : matchedIndices) {
-                board[i.getI()][i.getJ()] = 0;
+                board[i.getX()][i.getY()] = 0;
             }
         } catch (Exception e) {
             System.err.println("Unexpected error");
@@ -190,10 +190,10 @@ public class BeatBlockBoard extends GameBoard {
     /* private methods */
 
     private boolean validBounds (Index i) {
-        if (i.getI() < 0 || i.getI() > board.length - 1) {
+        if (i.getX() < 0 || i.getY() > board.length - 1) {
             return false;
         }
-        if (i.getJ() < 0 || i.getJ() > board.length - 1) {
+        if (i.getX() < 0 || i.getY() > board.length - 1) {
             return false;
         }
         return true;

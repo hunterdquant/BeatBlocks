@@ -10,6 +10,9 @@ import java.util.List;
 abstract class GameBoard {
 
     /* data members */
+    public static final int WIDTH = 5;
+    public static final int HEIGHT = 5;
+
     protected byte [][] board;
 
     /* protected abstract methods */

@@ -8,19 +8,19 @@ package group.cs242.beatblocks;
 public class Index {
 
     /* data members */
-    private int i;
-    private int j;
+    private int x;
+    private int y;
 
     /* constructors */
 
     /**
      *
-     * @param i - the x index
-     * @param j - the y index
+     * @param x - the x index
+     * @param y - the y index
      */
-    public Index(int i, int j) {
-        this.i = i;
-        this.j = j;
+    public Index(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     /* public methods */
@@ -29,15 +29,17 @@ public class Index {
      *
      * @return the x position of the index.
      */
-    public int getI() {
-        return i;
+    public int getX() {
+
+        return x;
     }
 
     /**
      *
      * @return the y position of the array.
      */
-    public int getJ() {
-        return j;
+    public int getY() {
+
+        return y;
     }
 }
