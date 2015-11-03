@@ -189,11 +189,16 @@ public class BeatBlockBoard extends GameBoard {
 
     /* private methods */
 
+    /**
+     *
+     * @param i - an index to check for validity.
+     * @return true if it's a valid index.
+     */
     private boolean validBounds (Index i) {
         if (i.getX() < 0 || i.getY() > board.length - 1) {
             return false;
         }
-        if (i.getX() < 0 || i.getY() > board.length - 1) {
+        if (i.getY() < 0 || i.getX() > board.length - 1) {
             return false;
         }
         return true;
