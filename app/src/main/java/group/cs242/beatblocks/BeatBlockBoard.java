@@ -12,8 +12,8 @@ import java.util.Random;
 public class BeatBlockBoard extends GameBoard {
 
     /* constructors */
-    public BeatBlockBoard() {
-        board = new byte[WIDTH][HEIGHT];
+    public BeatBlockBoard(int size) {
+        board = new byte[width = size][height = size];
         populate();
     }
 
@@ -202,5 +202,17 @@ public class BeatBlockBoard extends GameBoard {
             return false;
         }
         return true;
+    }
+
+    /**
+     *
+     * @return The size of the board.
+     */
+    public int getBoardSize() {
+        return width;
+    }
+
+    public int getValAtIndex(Index i) {
+        return board[i.getX()][i.getY()];
     }
 }

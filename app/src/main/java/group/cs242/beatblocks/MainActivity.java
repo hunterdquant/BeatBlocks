@@ -12,10 +12,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        beatBlockBoard = new BeatBlockBoard();
+        beatBlockBoard = new BeatBlockBoard(5);
         beatBlockBoardView = new BeatBlockBoardView(this, beatBlockBoard);
-        beatBlockBoardView.setLayoutParams(
-                new ViewGroup.LayoutParams(1080, 860));
         setContentView(beatBlockBoardView);
         //setContentView(R.layout.activity_main);
     }
