@@ -29,13 +29,12 @@ public class BeatBlockBoardView extends View {
     }
 
     public int getViewWidth() {
+
         return width;
     }
 
     public int getViewHeight() {
+
         return height;
     }
-
-
-
 }
