@@ -63,11 +63,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onDown(MotionEvent e) {
+
             return true;
         }
 
         @Override
         public boolean onTouch(View v, MotionEvent e) {
+
             return gd.onTouchEvent(e);
         }
     }

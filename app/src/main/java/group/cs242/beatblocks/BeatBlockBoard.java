@@ -113,7 +113,7 @@ public class BeatBlockBoard extends GameBoard {
     /**
      * Populates all empty indices of the game board.
      */
-    protected void populate() {
+    public void populate() {
         Random rand = new Random();
         try {
             //Randomly populate each element of the game board.
@@ -183,7 +183,7 @@ public class BeatBlockBoard extends GameBoard {
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
-        //Repopulate.
+
         populate();
     }
 
