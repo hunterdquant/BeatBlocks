@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,7 +30,6 @@ public class BeatBlockBoardView extends View {
     public BeatBlockBoardView(Context context, BeatBlockBoard bbb) {
         super(context);
         beatBlockBoard = bbb;
-
     }
 
     @Override
@@ -41,7 +41,10 @@ public class BeatBlockBoardView extends View {
                 canvas.drawBitmap(bitmaps[bitMapVal], 200*i, 200*j, null);
             }
         }
+        invalidate();
     }
+
+
 
     public int getViewWidth() {
 
