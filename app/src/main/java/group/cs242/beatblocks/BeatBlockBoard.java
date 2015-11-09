@@ -121,7 +121,7 @@ public class BeatBlockBoard extends GameBoard {
                 for (int j = 0; j < board[0].length; j++) {
                     if (board[i][j] != 0) continue;
                     //Adding 1 to exclude zero.
-                    byte blockType = (byte)(rand.nextInt(4) + 1);
+                    byte blockType = (byte)(rand.nextInt(5) + 1);
                     board[i][j] = blockType;
                 }
             }

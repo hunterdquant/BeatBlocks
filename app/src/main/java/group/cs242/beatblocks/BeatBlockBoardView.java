@@ -21,6 +21,7 @@ public class BeatBlockBoardView extends View {
     private Bitmap[] bitmaps = {
                         getBitmap(R.mipmap.blackblock),
                         getBitmap(R.mipmap.yellowblock),
+                        getBitmap(R.mipmap.purpleblock),
                         getBitmap(R.mipmap.greenblock),
                         getBitmap(R.mipmap.blueblock),
                         getBitmap(R.mipmap.redblock)};
