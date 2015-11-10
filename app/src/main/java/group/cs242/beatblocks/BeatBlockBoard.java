@@ -212,6 +212,11 @@ public class BeatBlockBoard extends GameBoard {
         return width;
     }
 
+    /**
+     *
+     * @param i - the index to retrieve the value from.
+     * @return The value at the index i.
+     */
     public int getValAtIndex(Index i) {
         return board[i.getX()][i.getY()];
     }

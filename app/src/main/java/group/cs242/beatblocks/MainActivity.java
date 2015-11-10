@@ -11,8 +11,11 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    // The game board to be passed to the view
     private BeatBlockBoard beatBlockBoard;
+    // The view to be drawn to the screen
     private BeatBlockBoardView beatBlockBoardView;
+    // The GestureListener for detecting touch events.
     private MoveGestureListener mgl;
 
     @Override
@@ -20,11 +23,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         beatBlockBoard = new BeatBlockBoard(5);
         beatBlockBoardView = new BeatBlockBoardView(this, beatBlockBoard);
+        // Attach the GestureListener to the game view.
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
         setContentView(beatBlockBoardView);
         //setContentView(R.layout.activity_main);
     }
 
+    /**
+     * Handles touch events for the game view.
+     */
     class MoveGestureListener extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
 
         GestureDetector gd;

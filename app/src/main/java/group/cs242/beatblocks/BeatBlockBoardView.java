@@ -17,7 +17,10 @@ import android.view.WindowManager;
  */
 public class BeatBlockBoardView extends View {
 
+    // The game board.
     private BeatBlockBoard beatBlockBoard;
+
+    // An array of bitmaps. Their array index is matched with a value in beatBlockBoard.
     private Bitmap[] bitmaps = {
                         getBitmap(R.mipmap.blackblock),
                         getBitmap(R.mipmap.yellowblock),
@@ -25,14 +28,24 @@ public class BeatBlockBoardView extends View {
                         getBitmap(R.mipmap.greenblock),
                         getBitmap(R.mipmap.blueblock),
                         getBitmap(R.mipmap.redblock)};
+    // View dimensions.
     private int width, height;
-    private boolean pause = false;
 
+    /**
+     *
+     * @param context - The current context.
+     * @param bbb - A BeatBlockBoard object to handle board operations.
+     */
     public BeatBlockBoardView(Context context, BeatBlockBoard bbb) {
         super(context);
         beatBlockBoard = bbb;
     }
 
+    /**
+     * Draws all the bitmaps in a grid.
+     *
+     * @param canvas - canvas to draw elements upon.
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -44,21 +57,34 @@ public class BeatBlockBoardView extends View {
             }
         }
 
+        // Used to refresh.
         invalidate();
     }
 
 
-
+    /**
+     *
+     * @return The width of the view
+     */
     public int getViewWidth() {
 
         return width;
     }
 
+    /**
+     *
+     * @return The height of the view.
+     */
     public int getViewHeight() {
 
         return height;
     }
 
+    /**
+     *
+     * @param imgId - the id og an image resource.
+     * @return The loaded bitmap.
+     */
     private Bitmap getBitmap(int imgId) {
         return BitmapFactory.decodeResource(getResources(), imgId);
     }
