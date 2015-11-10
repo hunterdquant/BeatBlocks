@@ -17,6 +17,8 @@ import android.view.WindowManager;
  */
 public class BeatBlockBoardView extends View {
 
+    /* Data members */
+
     // The game board.
     private BeatBlockBoard beatBlockBoard;
 
@@ -31,6 +33,8 @@ public class BeatBlockBoardView extends View {
     // View dimensions.
     private int width, height;
 
+    /* Constructor */
+
     /**
      *
      * @param context - The current context.
@@ -40,6 +44,8 @@ public class BeatBlockBoardView extends View {
         super(context);
         beatBlockBoard = bbb;
     }
+
+    /* Protected methods */
 
     /**
      * Draws all the bitmaps in a grid.
@@ -61,6 +67,7 @@ public class BeatBlockBoardView extends View {
         invalidate();
     }
 
+    /* Public methods */
 
     /**
      *
@@ -79,6 +86,8 @@ public class BeatBlockBoardView extends View {
 
         return height;
     }
+
+    /* Private methods */
 
     /**
      *

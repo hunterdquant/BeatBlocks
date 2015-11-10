@@ -108,8 +108,6 @@ public class BeatBlockBoard extends GameBoard {
         checkMatches();
     }
 
-    /* protected methods */
-
     /**
      * Populates all empty indices of the game board.
      */
@@ -132,6 +130,26 @@ public class BeatBlockBoard extends GameBoard {
         //After population check for matches on the board.
         checkMatches();
     }
+
+
+    /**
+     *
+     * @return The size of the board.
+     */
+    public int getBoardSize() {
+        return width;
+    }
+
+    /**
+     *
+     * @param i - the index to retrieve the value from.
+     * @return The value at the index i.
+     */
+    public int getValAtIndex(Index i) {
+        return board[i.getX()][i.getY()];
+    }
+
+    /* Protected methods */
 
     /**
      * Finds all matches of 3+ on the game board.
@@ -202,22 +220,5 @@ public class BeatBlockBoard extends GameBoard {
             return false;
         }
         return true;
-    }
-
-    /**
-     *
-     * @return The size of the board.
-     */
-    public int getBoardSize() {
-        return width;
-    }
-
-    /**
-     *
-     * @param i - the index to retrieve the value from.
-     * @return The value at the index i.
-     */
-    public int getValAtIndex(Index i) {
-        return board[i.getX()][i.getY()];
     }
 }

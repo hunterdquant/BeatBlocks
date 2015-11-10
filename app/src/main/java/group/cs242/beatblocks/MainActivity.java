@@ -34,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
      */
     class MoveGestureListener extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
 
-        GestureDetector gd;
+        /* Data members */
+
+        private GestureDetector gd;
         Context context;
+
+        /* Constructors */
 
         public MoveGestureListener() {
             super();
@@ -52,10 +56,23 @@ public class MainActivity extends AppCompatActivity {
             this.context = context;
         }
 
+        /* public methods */
+
+        /**
+         *
+         * @param e1 -  The initial event.
+         * @param e2 - The ending event.
+         * @param velX - x velocity
+         * @param velY - y velocity
+         * @return true.
+         */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velX, float velY) {
 
+            // The index to move is the initial events x/y divided by the dimensions of the square.
             Index moveIndex = new Index((int)e1.getX()/200, (int)e1.getY()/200);
+
+            // Move in the appropriate direction if the user swiped a distance of 150 px.
             if (e1.getX() - e2.getX() <= -150) {
                 beatBlockBoard.moveBlockRight(moveIndex);
             } else if (e1.getX() - e2.getX() >= 150) {
@@ -68,12 +85,24 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        /**
+         * Needs to return true because a fling is dependant on this event.
+         *
+         * @param e - An event.
+         * @return true.
+         */
         @Override
         public boolean onDown(MotionEvent e) {
 
             return true;
         }
 
+        /**
+         *
+         * @param v - the attached view.
+         * @param e - An event.
+         * @return a boolean.
+         */
         @Override
         public boolean onTouch(View v, MotionEvent e) {
 
