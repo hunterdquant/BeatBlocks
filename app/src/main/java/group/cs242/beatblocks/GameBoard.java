@@ -15,7 +15,7 @@ abstract class GameBoard {
 
     /* protected abstract methods */
 
-    protected abstract void populate();
-    protected abstract void checkMatches();
-    protected abstract void removeMatches(List<Index> matchedIndices);
+    public abstract void populate();
+    public abstract List<Index> checkMatches();
+    public abstract void removeMatches(List<Index> matchedIndices);
 }

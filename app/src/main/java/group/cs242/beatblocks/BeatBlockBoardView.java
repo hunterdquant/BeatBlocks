@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import java.util.List;
+
 /**
  * Created by Hunter on 11/3/2015.
  */
@@ -21,6 +23,7 @@ public class BeatBlockBoardView extends View {
 
     // The game board.
     private BeatBlockBoard beatBlockBoard;
+    private boolean canPopulate = true;
 
     // An array of bitmaps. Their array index is matched with a value in beatBlockBoard.
     private Bitmap[] bitmaps = {
@@ -43,6 +46,9 @@ public class BeatBlockBoardView extends View {
     public BeatBlockBoardView(Context context, BeatBlockBoard bbb) {
         super(context);
         beatBlockBoard = bbb;
+        beatBlockBoard.populate();
+        beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
+
     }
 
     /* Protected methods */
@@ -60,6 +66,27 @@ public class BeatBlockBoardView extends View {
             for (int j = 0; j < beatBlockBoard.getBoardSize(); j++) {
                 int bitMapVal = beatBlockBoard.getValAtIndex(new Index(i, j));
                 canvas.drawBitmap(bitmaps[bitMapVal], 200*i, 200*j, null);
+            }
+        }
+
+        if (canPopulate) {
+            beatBlockBoard.populate();
+            List<Index> matchList = beatBlockBoard.checkMatches();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+            if (matchList.size() > 2) {
+                beatBlockBoard.removeMatches(matchList);
+                canPopulate = false;
+            }
+        } else {
+            try {
+                Thread.sleep(100);
+                canPopulate = true;
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
             }
         }
 

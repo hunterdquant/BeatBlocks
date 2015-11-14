@@ -73,13 +73,13 @@ public class MainActivity extends AppCompatActivity {
             Index moveIndex = new Index((int)e1.getX()/200, (int)e1.getY()/200);
 
             // Move in the appropriate direction if the user swiped a distance of 150 px.
-            if (e1.getX() - e2.getX() <= -150) {
+            if (e1.getX() - e2.getX() <= -100) {
                 beatBlockBoard.moveBlockRight(moveIndex);
-            } else if (e1.getX() - e2.getX() >= 150) {
+            } else if (e1.getX() - e2.getX() >= 100) {
                 beatBlockBoard.moveBlockLeft(moveIndex);
-            } else if (e1.getY() - e2.getY() >= 150) {
+            } else if (e1.getY() - e2.getY() >= 100) {
                 beatBlockBoard.moveBlockUp(moveIndex);
-            } else if (e1.getY() - e2.getY() <- 150){
+            } else if (e1.getY() - e2.getY() <= -100){
                 beatBlockBoard.moveBlockDown(moveIndex);
             }
             return true;

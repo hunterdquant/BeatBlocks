@@ -111,6 +111,7 @@ public class BeatBlockBoard extends GameBoard {
     /**
      * Populates all empty indices of the game board.
      */
+    @Override
     public void populate() {
         Random rand = new Random();
         try {
@@ -154,7 +155,8 @@ public class BeatBlockBoard extends GameBoard {
     /**
      * Finds all matches of 3+ on the game board.
      */
-    protected void checkMatches() {
+    @Override
+    public List<Index> checkMatches() {
         List<Index> matchedIndices = new ArrayList<Index>();
         try {
             //Add all indices in a 3+ match.
@@ -181,7 +183,7 @@ public class BeatBlockBoard extends GameBoard {
             e.printStackTrace();
         }
         //After finding the matches, remove the elements at the matched indices.
-        removeMatches(matchedIndices);
+        return matchedIndices;
     }
 
     /**
@@ -189,7 +191,8 @@ public class BeatBlockBoard extends GameBoard {
      *
      * Sets all matched indices to zero, then calls for a repopulate.
      */
-    protected void removeMatches(List<Index> matchedIndices) {
+    @Override
+    public void removeMatches(List<Index> matchedIndices) {
         if (matchedIndices.size() == 0) {
             return;
         }
@@ -201,8 +204,6 @@ public class BeatBlockBoard extends GameBoard {
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
-
-        populate();
     }
 
     /* private methods */
