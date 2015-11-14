@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         beatBlockBoardView = new BeatBlockBoardView(this, beatBlockBoard);
         // Attach the GestureListener to the game view.
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
+
+        beatBlockBoardView.setLeft(100);
         setContentView(beatBlockBoardView);
         //setContentView(R.layout.activity_main);
     }
@@ -71,16 +73,19 @@ public class MainActivity extends AppCompatActivity {
 
             // The index to move is the initial events x/y divided by the dimensions of the square.
             Index moveIndex = new Index((int)e1.getX()/200, (int)e1.getY()/200);
-
-            // Move in the appropriate direction if the user swiped a distance of 150 px.
-            if (e1.getX() - e2.getX() <= -100) {
-                beatBlockBoard.moveBlockRight(moveIndex);
-            } else if (e1.getX() - e2.getX() >= 100) {
-                beatBlockBoard.moveBlockLeft(moveIndex);
-            } else if (e1.getY() - e2.getY() >= 100) {
-                beatBlockBoard.moveBlockUp(moveIndex);
-            } else if (e1.getY() - e2.getY() <= -100){
-                beatBlockBoard.moveBlockDown(moveIndex);
+            // Move in the appropriate direction if the user swiped a distance of 100 px.
+            if (Math.abs(e1.getX() - e2.getX()) >= Math.abs(e1.getY() - e2.getY())) {
+                if (e1.getX() - e2.getX() <= -100) {
+                    beatBlockBoard.moveBlockRight(moveIndex);
+                } else if (e1.getX() - e2.getX() >= 100) {
+                    beatBlockBoard.moveBlockLeft(moveIndex);
+                }
+            } else {
+                if (e1.getY() - e2.getY() >= 100) {
+                    beatBlockBoard.moveBlockUp(moveIndex);
+                } else if (e1.getY() - e2.getY() <= -100){
+                    beatBlockBoard.moveBlockDown(moveIndex);
+                }
             }
             return true;
         }
