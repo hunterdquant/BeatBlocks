@@ -24,6 +24,7 @@ public class BeatBlockBoardView extends View {
     // The game board.
     private BeatBlockBoard beatBlockBoard;
     private boolean canPopulate = true;
+    private boolean paused = false;
 
     // An array of bitmaps. Their array index is matched with a value in beatBlockBoard.
     private Bitmap[] bitmaps = {
@@ -41,14 +42,12 @@ public class BeatBlockBoardView extends View {
     /**
      *
      * @param context - The current context.
-     * @param bbb - A BeatBlockBoard object to handle board operations.
      */
-    public BeatBlockBoardView(Context context, BeatBlockBoard bbb) {
+    public BeatBlockBoardView(Context context) {
         super(context);
-        beatBlockBoard = bbb;
+        beatBlockBoard = new BeatBlockBoard(5);
         beatBlockBoard.populate();
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
-
     }
 
     /* Protected methods */
@@ -61,37 +60,57 @@ public class BeatBlockBoardView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (!paused) {
+            for (int i = 0; i < beatBlockBoard.getBoardSize(); i++) {
+                for (int j = 0; j < beatBlockBoard.getBoardSize(); j++) {
+                    int bitMapVal = beatBlockBoard.getValAtIndex(new Index(i, j));
+                    canvas.drawBitmap(bitmaps[bitMapVal], 200 * i, 200 * j, null);
+                }
+            }
 
-        for (int i = 0; i < beatBlockBoard.getBoardSize(); i++) {
-            for (int j = 0; j < beatBlockBoard.getBoardSize(); j++) {
-                int bitMapVal = beatBlockBoard.getValAtIndex(new Index(i, j));
-                canvas.drawBitmap(bitmaps[bitMapVal], 200*i, 200*j, null);
+            if (canPopulate) {
+                beatBlockBoard.populate();
+                List<Index> matchList = beatBlockBoard.checkMatches();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+                if (matchList.size() > 2) {
+                    beatBlockBoard.removeMatches(matchList);
+                    canPopulate = false;
+                }
+            } else {
+                try {
+                    Thread.sleep(100);
+                    canPopulate = true;
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
             }
         }
-
-        if (canPopulate) {
-            beatBlockBoard.populate();
-            List<Index> matchList = beatBlockBoard.checkMatches();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-            if (matchList.size() > 2) {
-                beatBlockBoard.removeMatches(matchList);
-                canPopulate = false;
-            }
-        } else {
-            try {
-                Thread.sleep(100);
-                canPopulate = true;
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-        }
-
         // Used to refresh.
         invalidate();
+    }
+
+    public void moveBlockUp(Index i) {
+        beatBlockBoard.moveBlockUp(i);
+    }
+
+    public void moveBlockRight(Index i) {
+        beatBlockBoard.moveBlockRight(i);
+    }
+
+    public void moveBlockDown(Index i) {
+        beatBlockBoard.moveBlockDown(i);
+    }
+
+    public void moveBlockLeft(Index i) {
+        beatBlockBoard.moveBlockLeft(i);
+    }
+
+    public void togglePause() {
+        paused = !paused;
     }
 
     /* Public methods */
@@ -112,6 +131,10 @@ public class BeatBlockBoardView extends View {
     public int getViewHeight() {
 
         return height;
+    }
+
+    public boolean isPaused() {
+        return paused;
     }
 
     /* Private methods */
