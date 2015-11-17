@@ -4,14 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.view.Display;
-import android.view.MotionEvent;
+import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-
 import java.util.List;
 
 /**
@@ -25,17 +19,11 @@ public class BeatBlockBoardView extends View {
     private BeatBlockBoard beatBlockBoard;
     private boolean canPopulate = true;
     private boolean paused = false;
-
+    private int blockDimensions;
+    private int dimensions;
     // An array of bitmaps. Their array index is matched with a value in beatBlockBoard.
-    private Bitmap[] bitmaps = {
-                        getBitmap(R.mipmap.blackblock),
-                        getBitmap(R.mipmap.yellowblock),
-                        getBitmap(R.mipmap.purpleblock),
-                        getBitmap(R.mipmap.greenblock),
-                        getBitmap(R.mipmap.blueblock),
-                        getBitmap(R.mipmap.redblock)};
-    // View dimensions.
-    private int width, height;
+    private Bitmap[] bitmaps = new Bitmap[6];
+
 
     /* Constructor */
 
@@ -43,12 +31,30 @@ public class BeatBlockBoardView extends View {
      *
      * @param context - The current context.
      */
-    public BeatBlockBoardView(Context context) {
+    public BeatBlockBoardView(Context context, int width, int height) {
         super(context);
+        dimensions = width > height/2 ? height/2 : width;
+        blockDimensions = dimensions/5;
+        bitmaps[0] = getBitmap(R.mipmap.blackblock);
+        bitmaps[1] = getBitmap(R.mipmap.yellowblock);
+        bitmaps[2] = getBitmap(R.mipmap.purpleblock);
+        bitmaps[3] = getBitmap(R.mipmap.greenblock);
+        bitmaps[4] = getBitmap(R.mipmap.blueblock);
+        bitmaps[5] = getBitmap(R.mipmap.redblock);
+
         beatBlockBoard = new BeatBlockBoard(5);
         beatBlockBoard.populate();
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
     }
+
+    public BeatBlockBoardView(Context context, AttributeSet as) {
+        super(context, as);
+        beatBlockBoard = new BeatBlockBoard(5);
+        beatBlockBoard.populate();
+        beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
+    }
+
+
 
     /* Protected methods */
 
@@ -64,7 +70,7 @@ public class BeatBlockBoardView extends View {
             for (int i = 0; i < beatBlockBoard.getBoardSize(); i++) {
                 for (int j = 0; j < beatBlockBoard.getBoardSize(); j++) {
                     int bitMapVal = beatBlockBoard.getValAtIndex(new Index(i, j));
-                    canvas.drawBitmap(bitmaps[bitMapVal], 200 * i, 200 * j, null);
+                    canvas.drawBitmap(bitmaps[bitMapVal], blockDimensions * i, blockDimensions * j, null);
                 }
             }
 
@@ -93,6 +99,12 @@ public class BeatBlockBoardView extends View {
         invalidate();
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        setMeasuredDimension(dimensions, dimensions);
+    }
+
     public void moveBlockUp(Index i) {
         beatBlockBoard.moveBlockUp(i);
     }
@@ -115,26 +127,12 @@ public class BeatBlockBoardView extends View {
 
     /* Public methods */
 
-    /**
-     *
-     * @return The width of the view
-     */
-    public int getViewWidth() {
-
-        return width;
-    }
-
-    /**
-     *
-     * @return The height of the view.
-     */
-    public int getViewHeight() {
-
-        return height;
-    }
-
     public boolean isPaused() {
         return paused;
+    }
+
+    public int getBlockDimensions() {
+        return blockDimensions;
     }
 
     /* Private methods */
@@ -145,6 +143,8 @@ public class BeatBlockBoardView extends View {
      * @return The loaded bitmap.
      */
     private Bitmap getBitmap(int imgId) {
-        return BitmapFactory.decodeResource(getResources(), imgId);
+        return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), imgId), blockDimensions, blockDimensions, false);
     }
+
+
 }
