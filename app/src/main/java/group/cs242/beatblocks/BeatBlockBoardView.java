@@ -1,11 +1,16 @@
 package group.cs242.beatblocks;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import java.util.List;
 
 /**
@@ -17,7 +22,9 @@ public class BeatBlockBoardView extends View {
 
     // The game board.
     private BeatBlockBoard beatBlockBoard;
+    // Status flag
     private boolean canPopulate = true;
+    // Pause status flag.
     private boolean paused = false;
     private int blockDimensions;
     private int dimensions;
@@ -47,8 +54,30 @@ public class BeatBlockBoardView extends View {
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
     }
 
-    public BeatBlockBoardView(Context context, AttributeSet as) {
-        super(context, as);
+    public BeatBlockBoardView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.BeatBlockBoardView,
+                0, 0);
+        int width, height;
+        try {
+            width = a.getInteger(R.styleable.BeatBlockBoardView_width_of_screen, 1080);
+            height = a.getInteger(R.styleable.BeatBlockBoardView_height_of_screen, 1920);
+        } finally {
+            a.recycle();
+        }
+
+
+        dimensions = width > height/2 ? height/2 : width;
+        blockDimensions = dimensions/5;
+        bitmaps[0] = getBitmap(R.mipmap.blackblock);
+        bitmaps[1] = getBitmap(R.mipmap.yellowblock);
+        bitmaps[2] = getBitmap(R.mipmap.purpleblock);
+        bitmaps[3] = getBitmap(R.mipmap.greenblock);
+        bitmaps[4] = getBitmap(R.mipmap.blueblock);
+        bitmaps[5] = getBitmap(R.mipmap.redblock);
+
         beatBlockBoard = new BeatBlockBoard(5);
         beatBlockBoard.populate();
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
@@ -133,6 +162,18 @@ public class BeatBlockBoardView extends View {
 
     public int getBlockDimensions() {
         return blockDimensions;
+    }
+
+    public void setDimensions(int width, int height) {
+        dimensions = width > height/2 ? height/2 : width;
+        blockDimensions = dimensions/5;
+
+        bitmaps[0] = getBitmap(R.mipmap.blackblock);
+        bitmaps[1] = getBitmap(R.mipmap.yellowblock);
+        bitmaps[2] = getBitmap(R.mipmap.purpleblock);
+        bitmaps[3] = getBitmap(R.mipmap.greenblock);
+        bitmaps[4] = getBitmap(R.mipmap.blueblock);
+        bitmaps[5] = getBitmap(R.mipmap.redblock);
     }
 
     /* Private methods */

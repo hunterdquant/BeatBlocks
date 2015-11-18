@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BeatBlockBoardView">
+        <attr name="width_of_screen" format="integer"/>
+        <attr name="height_of_screen" format="integer"/>
+    </declare-styleable>
+</resources>

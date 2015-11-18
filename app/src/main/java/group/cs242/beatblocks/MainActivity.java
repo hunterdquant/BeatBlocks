@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,20 +25,22 @@ public class MainActivity extends AppCompatActivity {
 
         Point p = new Point();
         getWindowManager().getDefaultDisplay().getSize(p);
-
-        beatBlockBoardView = new BeatBlockBoardView(this, p.x, p.y);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View mainLayout = inflater.inflate(R.layout.activity_main, null);
+        beatBlockBoardView = (BeatBlockBoardView)mainLayout.findViewById(R.id.beat_block_board_view);
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
-        setContentView(beatBlockBoardView);
-
+        beatBlockBoardView.setDimensions(p.x, p.y);
+        setContentView(mainLayout);
         ActionBar bar = getSupportActionBar();
         bar.hide();
         bar.setDisplayShowHomeEnabled(false);
         bar.setDisplayShowTitleEnabled(false);
-        LayoutInflater inflater = LayoutInflater.from(this);
         View actionBarView = inflater.inflate(R.layout.beat_blocks_action_bar, null);
         TextView barTitle = (TextView) actionBarView.findViewById(R.id.title);
         barTitle.setText("Beat Blocks");
         ImageButton imgButton = (ImageButton) actionBarView.findViewById(R.id.pauseButton);
+        imgButton.setScaleX(2);
+        imgButton.setScaleY(2);
         imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,14 +57,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (!beatBlockBoardView.isPaused()) {
-            beatBlockBoardView.togglePause();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (beatBlockBoardView.isPaused()) {
             beatBlockBoardView.togglePause();
         }
     }
