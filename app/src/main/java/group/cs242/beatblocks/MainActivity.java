@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,21 +24,32 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        // Get the device dimensions.
         Point p = new Point();
         getWindowManager().getDefaultDisplay().getSize(p);
+
+        // Inflate the layout.
         LayoutInflater inflater = LayoutInflater.from(this);
         View mainLayout = inflater.inflate(R.layout.activity_main, null);
+
+        // Retrieve and setup the beatBlockBoardView.
         beatBlockBoardView = (BeatBlockBoardView)mainLayout.findViewById(R.id.beat_block_board_view);
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
         beatBlockBoardView.setDimensions(p.x, p.y);
+
+        // Set the content as the layout.
         setContentView(mainLayout);
+
+        // Retrieve the action bar and setup its elements.
         ActionBar bar = getSupportActionBar();
-        bar.hide();
         bar.setDisplayShowHomeEnabled(false);
         bar.setDisplayShowTitleEnabled(false);
+        // Inflate to retrieve its elements
         View actionBarView = inflater.inflate(R.layout.beat_blocks_action_bar, null);
+        //Set the title
         TextView barTitle = (TextView) actionBarView.findViewById(R.id.title);
         barTitle.setText("Beat Blocks");
+        // Retrieve, scale, and set the on click function of the image button.
         ImageButton imgButton = (ImageButton) actionBarView.findViewById(R.id.pauseButton);
         imgButton.setScaleX(2);
         imgButton.setScaleY(2);
@@ -47,12 +59,20 @@ public class MainActivity extends AppCompatActivity {
                 beatBlockBoardView.togglePause();
             }
         });
+
+        // Retrieve and scale the image.
+        ImageView img = (ImageView) actionBarView.findViewById(R.id.gameIcon);
+        img.setScaleX(2);
+        img.setScaleY(2);
+
         bar.setCustomView(actionBarView);
         bar.setDisplayShowCustomEnabled(true);
         bar.show();
-
     }
 
+    /**
+     * When leaving the application pause the game.
+     */
     @Override
     protected void onPause() {
         super.onPause();

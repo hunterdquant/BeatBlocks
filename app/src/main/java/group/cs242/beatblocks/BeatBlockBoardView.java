@@ -26,6 +26,7 @@ public class BeatBlockBoardView extends View {
     private boolean canPopulate = true;
     // Pause status flag.
     private boolean paused = false;
+    // Pixel dimensions of the blocks and board.
     private int blockDimensions;
     private int dimensions;
     // An array of bitmaps. Their array index is matched with a value in beatBlockBoard.
@@ -35,13 +36,19 @@ public class BeatBlockBoardView extends View {
     /* Constructor */
 
     /**
+     *  Constructor for object creation without xml.
      *
      * @param context - The current context.
      */
     public BeatBlockBoardView(Context context, int width, int height) {
         super(context);
+
+        // The shorter of width and height/2 is the size.
         dimensions = width > height/2 ? height/2 : width;
+        // 5 blocks per board.
         blockDimensions = dimensions/5;
+
+        // Initialize the bitmaps.
         bitmaps[0] = getBitmap(R.mipmap.blackblock);
         bitmaps[1] = getBitmap(R.mipmap.yellowblock);
         bitmaps[2] = getBitmap(R.mipmap.purpleblock);
@@ -49,13 +56,28 @@ public class BeatBlockBoardView extends View {
         bitmaps[4] = getBitmap(R.mipmap.blueblock);
         bitmaps[5] = getBitmap(R.mipmap.redblock);
 
+        // Initialize the board and populate it.
         beatBlockBoard = new BeatBlockBoard(5);
         beatBlockBoard.populate();
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
+
+        // Remove all matches before starting.
+        while (beatBlockBoard.checkMatches().size() != 0) {
+            beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
+            beatBlockBoard.populate();
+        }
     }
 
+    /**
+     * Constructor used for defining via xml
+     *
+     * @param context - The current context
+     * @param attrs - The set of attributes as defined by the xml layout activity_main
+     */
     public BeatBlockBoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        // Retrieve the xml defined attributes.
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.BeatBlockBoardView,
@@ -68,9 +90,9 @@ public class BeatBlockBoardView extends View {
             a.recycle();
         }
 
-
         dimensions = width > height/2 ? height/2 : width;
         blockDimensions = dimensions/5;
+
         bitmaps[0] = getBitmap(R.mipmap.blackblock);
         bitmaps[1] = getBitmap(R.mipmap.yellowblock);
         bitmaps[2] = getBitmap(R.mipmap.purpleblock);
@@ -81,6 +103,11 @@ public class BeatBlockBoardView extends View {
         beatBlockBoard = new BeatBlockBoard(5);
         beatBlockBoard.populate();
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
+
+        while (beatBlockBoard.checkMatches().size() != 0) {
+            beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
+            beatBlockBoard.populate();
+        }
     }
 
 
@@ -103,6 +130,7 @@ public class BeatBlockBoardView extends View {
                 }
             }
 
+            // Handles the transition of blocks to blanks.
             if (canPopulate) {
                 beatBlockBoard.populate();
                 List<Index> matchList = beatBlockBoard.checkMatches();
@@ -128,42 +156,88 @@ public class BeatBlockBoardView extends View {
         invalidate();
     }
 
+    /**
+     * Defines the dimensions of the view.
+     *
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         setMeasuredDimension(dimensions, dimensions);
-    }
-
-    public void moveBlockUp(Index i) {
-        beatBlockBoard.moveBlockUp(i);
-    }
-
-    public void moveBlockRight(Index i) {
-        beatBlockBoard.moveBlockRight(i);
-    }
-
-    public void moveBlockDown(Index i) {
-        beatBlockBoard.moveBlockDown(i);
-    }
-
-    public void moveBlockLeft(Index i) {
-        beatBlockBoard.moveBlockLeft(i);
-    }
-
-    public void togglePause() {
-        paused = !paused;
     }
 
     /* Public methods */
 
+    /**
+     * Moves the block at index i up
+     *
+     * @param i - An index to be moved
+     */
+    public void moveBlockUp(Index i) {
+        beatBlockBoard.moveBlockUp(i);
+    }
+
+    /**
+     * Moves the block at index i right
+     *
+     * @param i - An index to be moved
+     */
+    public void moveBlockRight(Index i) {
+        beatBlockBoard.moveBlockRight(i);
+    }
+
+    /**
+     * Moves the block at index i down
+     *
+     * @param i - An index to be moved
+     */
+    public void moveBlockDown(Index i) {
+        beatBlockBoard.moveBlockDown(i);
+    }
+
+    /**
+     * Moves the block at index i left
+     *
+     * @param i - An index to be moved
+     */
+    public void moveBlockLeft(Index i) {
+        beatBlockBoard.moveBlockLeft(i);
+    }
+
+    /**
+     * Toggles the pause status of the game.
+     */
+    public void togglePause() {
+        paused = !paused;
+    }
+
+    /**
+     * Gets the pause status of the game.
+     *
+     * @return True if it's paused else false
+     */
     public boolean isPaused() {
         return paused;
     }
 
+    /**
+     * Gets the block dimensions.
+     *
+     * @return The dimensions of a block
+     */
     public int getBlockDimensions() {
         return blockDimensions;
     }
 
+    /**
+     * Sets the dimensions of the blocks and board. Has to be called
+     * because you can not get the screen dimensions through xml.
+     * Also reloads the bitmaps.
+     *
+     * @param width - the new width
+     * @param height - the new height
+     */
     public void setDimensions(int width, int height) {
         dimensions = width > height/2 ? height/2 : width;
         blockDimensions = dimensions/5;
@@ -184,6 +258,7 @@ public class BeatBlockBoardView extends View {
      * @return The loaded bitmap.
      */
     private Bitmap getBitmap(int imgId) {
+        // Load and scale the bitmaps.
         return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), imgId), blockDimensions, blockDimensions, false);
     }
 
