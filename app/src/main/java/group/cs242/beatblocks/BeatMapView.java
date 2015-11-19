@@ -16,6 +16,7 @@ public class BeatMapView extends View {
     private BeatMap bmap;
     private Paint paintA;
     private Paint paintB;
+    private Paint paintC = new Paint();
     private boolean paused = false;
 
 
@@ -30,6 +31,7 @@ public class BeatMapView extends View {
         paintB = new Paint();
         paintA.setColor(color1);
         paintB.setColor(color2);
+
     }
 
     public BeatMapView(Context context, AttributeSet attributeSet)
@@ -69,6 +71,9 @@ public class BeatMapView extends View {
         bmap.setUp();
         paintA.setColor(Color.GREEN);
         paintB.setColor(Color.BLACK);
+        paintC.setColor(Color.BLACK);
+        paintC.setStyle(Paint.Style.STROKE);
+        paintC.setStrokeWidth(10);
     }
 
     //Draws the accepting range and the beats
@@ -77,9 +82,11 @@ public class BeatMapView extends View {
         if(!paused) {
             super.onDraw(canvas);
             canvas.drawRect(bmap.accepting_range, paintA);
+            canvas.drawRect(bmap.border, paintC);
             for (int i = 0; i < bmap.duration_constant; i++) {
                 canvas.drawRect(bmap.beats[i].rectangle, paintB);
             }
+
         }
         invalidate();
     }
@@ -111,5 +118,10 @@ public class BeatMapView extends View {
          }
      }
 
+    }
+
+    public boolean isGoodMove()
+    {
+        return bmap.isGoodMove();
     }
 }

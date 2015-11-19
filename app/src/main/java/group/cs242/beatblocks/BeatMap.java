@@ -16,6 +16,7 @@ public class BeatMap{
     //Data Members
     Beat beats[];    //contains all of the beats that will be used throughout a game
     Rect accepting_range;  //an unmoving Rectangle the will represent when a move can be made
+    Rect border;
     int top;
     int bottom;
     int beat_width;
@@ -23,7 +24,6 @@ public class BeatMap{
     int height;
     int total_beats; //to be used in loops
     long milliseconds_per_beat;
-    int current_beat;   //should help speed up isGoodMove a little
     final int duration_constant = 10;
     Song song;
 
@@ -32,13 +32,12 @@ public class BeatMap{
     //Methods
     public boolean isGoodMove() //To be called whenever a move is made. Will return true if there
     {                           //is a beat that has not been used in the accepting range
-        for(int i = current_beat; i < duration_constant; i++)
+        for(int i = 0; i < duration_constant; i++)
         {
             if ((beats[i].getUsed() == false) &&
                     (accepting_range.contains(beats[i].rectangle)))
             {
                 beats[i].setUsed(true);
-                current_beat = i+1;
                 return true;
             }
         }
@@ -81,6 +80,9 @@ public class BeatMap{
         accepting_range.top= top;
         accepting_range.right = width;
         accepting_range.bottom = bottom;
+        border.bottom = bottom;
+        border.top = top;
+        border.right = width;
         for (int i = 0; i < duration_constant; i++) {
             beats[i].update(top, bottom);
         }
@@ -93,7 +95,6 @@ public class BeatMap{
         song = sng;
         total_beats = (int) (song.beats_per_minute * song.song_length);
         milliseconds_per_beat = (long) 60000 / song.beats_per_minute;
-        current_beat = 0;
         createBeats();
 }
 
@@ -107,6 +108,7 @@ public class BeatMap{
         bottom = height;
         beat_width = (int) ((float)width/27);
         accepting_range = new Rect(width - 200, top, width, bottom);
+        border = new Rect(0, top, width, bottom);
 
     }
 
@@ -116,7 +118,6 @@ public class BeatMap{
     {
         song = sng;
         milliseconds_per_beat = (long) 60000 / song.beats_per_minute;
-        current_beat = 0;
         createBeats();
 
 

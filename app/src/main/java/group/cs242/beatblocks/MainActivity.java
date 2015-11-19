@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -142,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
             // The index to move is the initial events x/y divided by the dimensions of the square.
             Index moveIndex = new Index((int)e1.getX()/blockSize, (int)e1.getY()/blockSize);
             // Move in the appropriate direction if the user swiped a distance of 100 px.
+            if(beatMapView.isGoodMove())
+            {
             if (Math.abs(e1.getX() - e2.getX()) >= Math.abs(e1.getY() - e2.getY())) {
                 if (e1.getX() - e2.getX() <= -blockSize/2) {
                     beatBlockBoardView.moveBlockRight(moveIndex);
@@ -157,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
+            else
+            {Log.i("Move", "Not good");
+            return false;}}
+
+
 
         /**
          * Needs to return true because a fling is dependant on this event.
