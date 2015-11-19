@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Point p = new Point();
         getWindowManager().getDefaultDisplay().getSize(p);
 
-        song = new Song(getApplicationContext(), 90, 1);
+        song = new Song(getApplicationContext(), 90);
 
 
         // Inflate the layout.

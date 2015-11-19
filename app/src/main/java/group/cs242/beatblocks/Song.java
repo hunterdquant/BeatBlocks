@@ -16,14 +16,18 @@ public class Song implements MediaPlayer.OnPreparedListener {
     long song_length;
     MediaPlayer player;
 
-    public Song(Context c, int bpm, long length)
+    //Constructor
+    public Song(Context c, int bpm)
     {
         beats_per_minute = bpm;
-        song_length = length;
         context = c;
         player = new MediaPlayer();
     }
 
+
+    //Methods
+
+    //Sets up and prepares the media player
     public void play()
     {
         try
@@ -43,6 +47,7 @@ public class Song implements MediaPlayer.OnPreparedListener {
         }
     }
 
+    //When the media player is prepared, the song will start
     @Override public void onPrepared(MediaPlayer mp)
     {
         mp.start();

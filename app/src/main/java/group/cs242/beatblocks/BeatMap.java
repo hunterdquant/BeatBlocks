@@ -1,6 +1,10 @@
 package group.cs242.beatblocks;
 
 import android.graphics.Rect;
+import android.os.SystemClock;
+import android.os.Handler;
+
+
 
 /**
  * @author Cameron Icso <icsoc@clarkson.edu> <icsoc22@gmail.com>
@@ -22,6 +26,8 @@ public class BeatMap{
     int current_beat;   //should help speed up isGoodMove a little
     final int duration_constant = 10;
     Song song;
+
+
 
     //Methods
     public boolean isGoodMove() //To be called whenever a move is made. Will return true if there
@@ -51,10 +57,19 @@ public class BeatMap{
 
     void run() //Runs the animation of all of the beats
     {
-        song.play();
+        Handler handler = new Handler();
+        //song.play();
         for (int i = 0; i < duration_constant; i++) {
             beats[i].Animate();
         }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                song.play();
+            }
+        }, 9*milliseconds_per_beat);
+
 
     }
 
@@ -100,7 +115,6 @@ public class BeatMap{
     BeatMap(Song sng)
     {
         song = sng;
-        total_beats = (int) (song.beats_per_minute * song.song_length);
         milliseconds_per_beat = (long) 60000 / song.beats_per_minute;
         current_beat = 0;
         createBeats();
