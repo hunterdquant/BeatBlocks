@@ -77,7 +77,7 @@ public class BeatMapView extends View {
         if(!paused) {
             super.onDraw(canvas);
             canvas.drawRect(bmap.accepting_range, paintA);
-            for (int i = 0; i < bmap.total_beats; i++) {
+            for (int i = 0; i < bmap.duration_constant; i++) {
                 canvas.drawRect(bmap.beats[i].rectangle, paintB);
             }
         }
@@ -95,7 +95,7 @@ public class BeatMapView extends View {
      {
          paused = true;
          bmap.song.player.pause();
-         for(int i = 0; i < bmap.total_beats; i++)
+         for(int i = 0; i < bmap.duration_constant; i++)
          {
              bmap.beats[i].centAnim.pause();
          }
@@ -105,7 +105,7 @@ public class BeatMapView extends View {
      {
         paused = false;
          bmap.song.player.start();
-         for(int i = 0; i < bmap.total_beats; i++)
+         for(int i = 0; i < bmap.duration_constant; i++)
          {
              bmap.beats[i].centAnim.resume();
          }

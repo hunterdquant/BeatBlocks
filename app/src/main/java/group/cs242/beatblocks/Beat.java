@@ -28,6 +28,8 @@ public class Beat implements ValueAnimator.AnimatorUpdateListener{
         centAnim.setIntValues(cent, width + beat_width/2);
         centAnim.setInterpolator(null);
         centAnim.setDuration(duration);
+        centAnim.setRepeatMode(ValueAnimator.RESTART);
+        centAnim.setRepeatCount(ValueAnimator.INFINITE);
         centAnim.setStartDelay(time_delay);
         centAnim.addUpdateListener(this);
     }

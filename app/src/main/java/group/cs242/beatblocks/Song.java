@@ -29,10 +29,11 @@ public class Song implements MediaPlayer.OnPreparedListener {
         try
         {
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            AssetFileDescriptor afd = context.getResources().openRawResourceFd(R.raw.song);
+            AssetFileDescriptor afd = context.getResources().openRawResourceFd(R.raw.sadpast);
             player.setOnPreparedListener(this);
             player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
+            player.setLooping(true);
             player.prepare();
 
         }

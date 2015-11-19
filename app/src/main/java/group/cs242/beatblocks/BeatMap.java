@@ -26,7 +26,7 @@ public class BeatMap{
     //Methods
     public boolean isGoodMove() //To be called whenever a move is made. Will return true if there
     {                           //is a beat that has not been used in the accepting range
-        for(int i = current_beat; i < total_beats; i++)
+        for(int i = current_beat; i < duration_constant; i++)
         {
             if ((beats[i].getUsed() == false) &&
                     (accepting_range.contains(beats[i].rectangle)))
@@ -40,8 +40,8 @@ public class BeatMap{
     }
     private void createBeats() //Called in the constructor, creates the Beats array
     {
-        beats = new Beat[total_beats];
-        for(int i = 0; i < total_beats; i++)
+        beats = new Beat[duration_constant];
+        for(int i = 0; i < duration_constant; i++)
         {
             beats[i] = new Beat(-beat_width, top, 0, bottom, i*milliseconds_per_beat,
                     duration_constant * milliseconds_per_beat, beat_width, width);
@@ -52,7 +52,7 @@ public class BeatMap{
     void run() //Runs the animation of all of the beats
     {
         song.play();
-        for (int i = 0; i < total_beats; i++) {
+        for (int i = 0; i < duration_constant; i++) {
             beats[i].Animate();
         }
 
@@ -62,11 +62,11 @@ public class BeatMap{
     {
         top = height-300;
         bottom = height;
-        accepting_range.left = width - 200;
+        accepting_range.left = width - 150;
         accepting_range.top= top;
         accepting_range.right = width;
         accepting_range.bottom = bottom;
-        for (int i = 0; i < total_beats; i++) {
+        for (int i = 0; i < duration_constant; i++) {
             beats[i].update(top, bottom);
         }
     }
