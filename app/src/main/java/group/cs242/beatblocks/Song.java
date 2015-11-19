@@ -38,7 +38,7 @@ public class Song implements MediaPlayer.OnPreparedListener {
         }
         catch (IOException e)
         {
-            Log.d("I", "error in setDataSource method");
+            Log.d("Error", "in setDataSource method");
         }
     }
 

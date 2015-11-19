@@ -16,6 +16,7 @@ public class BeatMapView extends View {
     private BeatMap bmap;
     private Paint paintA;
     private Paint paintB;
+    private boolean paused = false;
 
 
     //Constructor
@@ -62,17 +63,23 @@ public class BeatMapView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        super.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+        bmap.width = MeasureSpec.getSize(widthMeasureSpec);
+        bmap.height = MeasureSpec.getSize(heightMeasureSpec);
+        bmap.setUp();
+        paintA.setColor(Color.GREEN);
+        paintB.setColor(Color.BLACK);
     }
 
     //Draws the accepting range and the beats
     @Override public void onDraw(Canvas canvas)
     {
-        super.onDraw(canvas);
-        canvas.drawRect(bmap.accepting_range, paintA);
-        for(int i = 0; i< bmap.total_beats; i++)
-        {
-            canvas.drawRect(bmap.beats[i].rectangle, paintB);
+        if(!paused) {
+            super.onDraw(canvas);
+            canvas.drawRect(bmap.accepting_range, paintA);
+            for (int i = 0; i < bmap.total_beats; i++) {
+                canvas.drawRect(bmap.beats[i].rectangle, paintB);
+            }
         }
         invalidate();
     }
@@ -80,5 +87,29 @@ public class BeatMapView extends View {
     public void run()
     {
         bmap.run();
+    }
+
+    public void togglePause()
+    {
+     if(paused == false)
+     {
+         paused = true;
+         bmap.song.player.pause();
+         for(int i = 0; i < bmap.total_beats; i++)
+         {
+             bmap.beats[i].centAnim.pause();
+         }
+     }
+
+        else if (paused == true)
+     {
+        paused = false;
+         bmap.song.player.start();
+         for(int i = 0; i < bmap.total_beats; i++)
+         {
+             bmap.beats[i].centAnim.resume();
+         }
+     }
+
     }
 }

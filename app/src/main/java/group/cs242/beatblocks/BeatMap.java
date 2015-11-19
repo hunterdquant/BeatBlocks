@@ -43,7 +43,7 @@ public class BeatMap{
         beats = new Beat[total_beats];
         for(int i = 0; i < total_beats; i++)
         {
-            beats[i] = new Beat(-beat_width, 0, 0, bottom, i*milliseconds_per_beat,
+            beats[i] = new Beat(-beat_width, top, 0, bottom, i*milliseconds_per_beat,
                     duration_constant * milliseconds_per_beat, beat_width, width);
         }
     }
@@ -58,13 +58,28 @@ public class BeatMap{
 
     }
 
+    void setUp()
+    {
+        top = height-300;
+        bottom = height;
+        accepting_range.left = width - 200;
+        accepting_range.top= top;
+        accepting_range.right = width;
+        accepting_range.bottom = bottom;
+        for (int i = 0; i < total_beats; i++) {
+            beats[i].update(top, bottom);
+        }
+    }
+
+
+    
     void setUp(Song sng)
     {
         song = sng;
         total_beats = (int) (song.beats_per_minute * song.song_length);
         milliseconds_per_beat = (long) 60000 / song.beats_per_minute;
         current_beat = 0;
-    createBeats();
+        createBeats();
 }
 
     //Constructor
@@ -73,10 +88,10 @@ public class BeatMap{
     {
         width = w;
         height = h;
-        top = (int) ((float)(height-width)*.625);
-        bottom = (int) ((float)(height-width)*.375);
+        top = height-300;
+        bottom = height;
         beat_width = (int) ((float)width/27);
-        accepting_range = new Rect(width - (width+beat_width)/duration_constant, top, width, bottom);
+        accepting_range = new Rect(width - 200, top, width, bottom);
 
     }
 

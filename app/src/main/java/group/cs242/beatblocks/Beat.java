@@ -43,6 +43,12 @@ public class Beat implements ValueAnimator.AnimatorUpdateListener{
         used = u;
     }
 
+    public void update(int t, int b)
+    {
+        rectangle.top = t;
+        rectangle.bottom = b;
+    }
+
     @Override public void onAnimationUpdate(ValueAnimator animation)
     {
         rectangle.right = ((Integer) centAnim.getAnimatedValue()) + beat_width/2;
