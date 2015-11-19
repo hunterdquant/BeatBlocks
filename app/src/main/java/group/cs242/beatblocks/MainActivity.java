@@ -1,6 +1,7 @@
 package group.cs242.beatblocks;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
     // The view to be drawn to the screen
     private BeatBlockBoardView beatBlockBoardView;
 
+
+    //requirements for the whole BeatMap
+    private BeatMapView beatMapView; //Work on trimming down possibly
+    private Song song;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -28,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         Point p = new Point();
         getWindowManager().getDefaultDisplay().getSize(p);
 
+        song = new Song(getApplicationContext(), 60, 1);
+
+
         // Inflate the layout.
         LayoutInflater inflater = LayoutInflater.from(this);
         View mainLayout = inflater.inflate(R.layout.activity_main, null);
@@ -36,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         beatBlockBoardView = (BeatBlockBoardView)mainLayout.findViewById(R.id.beat_block_board_view);
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
         beatBlockBoardView.setDimensions(p.x, p.y);
+
+        beatMapView = (BeatMapView)mainLayout.findViewById(R.id.beat_map_view);
+        beatMapView.setUp(song);
 
         // Set the content as the layout.
         setContentView(mainLayout);
@@ -68,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         bar.setCustomView(actionBarView);
         bar.setDisplayShowCustomEnabled(true);
         bar.show();
+
+        beatMapView.run();
     }
 
     /**

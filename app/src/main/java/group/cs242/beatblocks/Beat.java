@@ -12,20 +12,22 @@ public class Beat implements ValueAnimator.AnimatorUpdateListener{
     //Data Members
     Rect rectangle;
     boolean used;    //represents if the beat has been used yet
+    int beat_width;
 
     int cent;
     ValueAnimator centAnim;
 
     //Constructors
-    Beat(int left, int top, int right, int bottom, long time_delay, long mspb)
+    Beat(int left, int top, int right, int bottom, long time_delay, long duration, int bw, int width)
     {
         rectangle = new Rect(left, top, right, bottom);
+        beat_width = bw;
         used = false;
-        cent = (right+left)/2;
+        cent = beat_width/2;
         centAnim = new ValueAnimator();
-        centAnim.setIntValues(cent, 1100);
+        centAnim.setIntValues(cent, width + beat_width/2);
         centAnim.setInterpolator(null);
-        centAnim.setDuration(10*mspb);
+        centAnim.setDuration(duration);
         centAnim.setStartDelay(time_delay);
         centAnim.addUpdateListener(this);
     }
@@ -43,8 +45,8 @@ public class Beat implements ValueAnimator.AnimatorUpdateListener{
 
     @Override public void onAnimationUpdate(ValueAnimator animation)
     {
-        rectangle.right = ((Integer) centAnim.getAnimatedValue()) + 20;
-        rectangle.left = ((Integer) centAnim.getAnimatedValue()) - 20;
+        rectangle.right = ((Integer) centAnim.getAnimatedValue()) + beat_width/2;
+        rectangle.left = ((Integer) centAnim.getAnimatedValue()) - beat_width/2;
 
     }
 

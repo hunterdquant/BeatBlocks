@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BeatMapView">
+        <attr name="width_screen" format="integer"/>
+        <attr name="height_screen" format="integer"/>
+        <attr name="accepting_color" format="integer"/>
+        <attr name="beat_color" format="integer"/>
+    </declare-styleable>
+</resources>

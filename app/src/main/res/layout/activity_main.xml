@@ -10,12 +10,23 @@
     <group.cs242.beatblocks.BeatBlockBoardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:id="@+id/beat_block_board_view"
         custom:width_of_screen="1080"
         custom:height_of_screen="1920"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <group.cs242.beatblocks.BeatMapView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/beat_map_view"
+        custom:width_screen="1080"
+        custom:height_screen="1920"
+        custom:accepting_color="-16776961"
+        custom:beat_color= "-256"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/beat_block_board_view"/>
+
 
 
 </RelativeLayout>
