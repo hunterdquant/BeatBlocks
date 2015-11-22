@@ -72,7 +72,7 @@ public class BeatBlockBoardView extends View {
      * Constructor used for defining via xml
      *
      * @param context - The current context
-     * @param attrs - The set of attributes as defined by the xml layout activity_main
+     * @param attrs - The set of attributes as defined by the xml layout game_activity
      */
     public BeatBlockBoardView(Context context, AttributeSet attrs) {
         super(context, attrs);

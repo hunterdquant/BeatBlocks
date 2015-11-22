@@ -1,7 +1,6 @@
 package group.cs242.beatblocks;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     // The view to be drawn to the screen
     private BeatBlockBoardView beatBlockBoardView;
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate the layout.
         LayoutInflater inflater = LayoutInflater.from(this);
-        View mainLayout = inflater.inflate(R.layout.activity_main, null);
+        View mainLayout = inflater.inflate(R.layout.game_activity, null);
 
         // Retrieve and setup the beatBlockBoardView.
         beatBlockBoardView = (BeatBlockBoardView)mainLayout.findViewById(R.id.beat_block_board_view);
@@ -52,18 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the content as the layout.
         setContentView(mainLayout);
-
-        // Retrieve the action bar and setup its elements.
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayShowHomeEnabled(false);
-        bar.setDisplayShowTitleEnabled(false);
-        // Inflate to retrieve its elements
-        View actionBarView = inflater.inflate(R.layout.beat_blocks_action_bar, null);
         //Set the title
-        TextView barTitle = (TextView) actionBarView.findViewById(R.id.title);
-        barTitle.setText("Beat Blocks");
+        TextView title = (TextView) mainLayout.findViewById(R.id.title);
+        title.setText("Beat Blocks");
         // Retrieve, scale, and set the on click function of the image button.
-        ImageButton imgButton = (ImageButton) actionBarView.findViewById(R.id.pauseButton);
+        final ImageButton imgButton = (ImageButton) mainLayout.findViewById(R.id.pauseButton);
         imgButton.setScaleX(2);
         imgButton.setScaleY(2);
         imgButton.setOnClickListener(new View.OnClickListener() {
@@ -71,17 +62,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 beatBlockBoardView.togglePause();
                 beatMapView.togglePause();
+                if (beatBlockBoardView.isPaused()) {
+                    imgButton.setImageResource(R.mipmap.play);
+                } else {
+                    imgButton.setImageResource(R.mipmap.pause);
+                }
             }
         });
 
         // Retrieve and scale the image.
-        ImageView img = (ImageView) actionBarView.findViewById(R.id.gameIcon);
+        ImageView img = (ImageView) mainLayout.findViewById(R.id.gameIcon);
         img.setScaleX(2);
         img.setScaleY(2);
-
-        bar.setCustomView(actionBarView);
-        bar.setDisplayShowCustomEnabled(true);
-        bar.show();
 
         beatMapView.run();
     }
@@ -94,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         if (!beatBlockBoardView.isPaused()) {
             beatBlockBoardView.togglePause();
+            beatMapView.togglePause();
         }
     }
 
@@ -127,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         /* public methods */
 
         /**
+         *  Moves blocks according to the direction and magnitude of the fling event.
          *
          * @param e1 -  The initial event.
          * @param e2 - The ending event.
@@ -143,26 +137,26 @@ public class MainActivity extends AppCompatActivity {
             // The index to move is the initial events x/y divided by the dimensions of the square.
             Index moveIndex = new Index((int)e1.getX()/blockSize, (int)e1.getY()/blockSize);
             // Move in the appropriate direction if the user swiped a distance of 100 px.
-            if(beatMapView.isGoodMove())
-            {
-            if (Math.abs(e1.getX() - e2.getX()) >= Math.abs(e1.getY() - e2.getY())) {
-                if (e1.getX() - e2.getX() <= -blockSize/2) {
-                    beatBlockBoardView.moveBlockRight(moveIndex);
-                } else if (e1.getX() - e2.getX() >= blockSize/2) {
-                    beatBlockBoardView.moveBlockLeft(moveIndex);
+           // if(beatMapView.isGoodMove()) {
+                if (Math.abs(e1.getX() - e2.getX()) >= Math.abs(e1.getY() - e2.getY())) {
+                    if (e1.getX() - e2.getX() <= -blockSize/2) {
+                        beatBlockBoardView.moveBlockRight(moveIndex);
+                    } else if (e1.getX() - e2.getX() >= blockSize/2) {
+                        beatBlockBoardView.moveBlockLeft(moveIndex);
+                    }
+                } else {
+                    if (e1.getY() - e2.getY() >= blockSize/2) {
+                        beatBlockBoardView.moveBlockUp(moveIndex);
+                    } else if (e1.getY() - e2.getY() <= -blockSize/2){
+                        beatBlockBoardView.moveBlockDown(moveIndex);
+                    }
                 }
-            } else {
-                if (e1.getY() - e2.getY() >= blockSize/2) {
-                    beatBlockBoardView.moveBlockUp(moveIndex);
-                } else if (e1.getY() - e2.getY() <= -blockSize/2){
-                    beatBlockBoardView.moveBlockDown(moveIndex);
-                }
-            }
-            return true;
+                return true;
+           //} else {
+               // Log.i("Move", "Not good");
+           // }
+            //return false;
         }
-            else
-            {Log.i("Move", "Not good");
-            return false;}}
 
 
 
