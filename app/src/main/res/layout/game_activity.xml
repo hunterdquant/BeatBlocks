@@ -8,6 +8,34 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textAllCaps="true"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:text="Score: 0"
+        android:fontFamily="roboto"
+        android:layout_below="@id/gameIcon"/>
+
+    <TextView
+        android:id="@+id/high_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textAllCaps="true"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:text="High Score: 0"
+        android:fontFamily="roboto"
+        android:layout_below="@id/score"/>
+
+    <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

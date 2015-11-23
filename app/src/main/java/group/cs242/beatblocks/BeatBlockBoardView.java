@@ -6,12 +6,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Hunter on 11/3/2015.
@@ -31,6 +36,9 @@ public class BeatBlockBoardView extends View {
     private int dimensions;
     // An array of bitmaps. Their array index is matched with a value in beatBlockBoard.
     private Bitmap[] bitmaps = new Bitmap[6];
+
+    private TextView score;
+    private TextView highScore;
 
 
     /* Constructor */
@@ -66,6 +74,25 @@ public class BeatBlockBoardView extends View {
             beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
             beatBlockBoard.populate();
         }
+        beatBlockBoard.setListener(new ScoreUpdateListener() {
+            @Override
+            public void updateScore(final Set<Index> set) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            updateScores(set);
+                            Log.i("Listener", "Called");
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+            }
+        });
     }
 
     /**
@@ -108,9 +135,28 @@ public class BeatBlockBoardView extends View {
             beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
             beatBlockBoard.populate();
         }
+
+        beatBlockBoard.setListener(new ScoreUpdateListener() {
+            @Override
+            public void updateScore(final Set<Index> set) {
+                updateScores(set);
+            }
+        });
     }
 
+    private void updateScores(Set<Index> set) {
+        int additionalPoints = beatBlockBoard.getPoints(set);
+        String[] s = score.getText().toString().trim().split(" ");
+        int totalPoints = (Integer.parseInt(s[1]) + additionalPoints);
+        CharSequence newScore = s[0] + " " + totalPoints;
 
+        String[] hs = highScore.getText().toString().trim().split(" ");
+        if (totalPoints >= Integer.parseInt(hs[2])) {
+            CharSequence newHighScore = hs[0] + " " + hs[1] + " " + totalPoints;
+            highScore.setText(newHighScore);
+        }
+        score.setText(newScore);
+    }
 
     /* Protected methods */
 
@@ -133,14 +179,14 @@ public class BeatBlockBoardView extends View {
             // Handles the transition of blocks to blanks.
             if (canPopulate) {
                 beatBlockBoard.populate();
-                List<Index> matchList = beatBlockBoard.checkMatches();
+                Set<Index> matchSet = beatBlockBoard.checkMatches();
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }
-                if (matchList.size() > 2) {
-                    beatBlockBoard.removeMatches(matchList);
+                if (matchSet.size() > 2) {
+                    beatBlockBoard.removeMatches(matchSet);
                     canPopulate = false;
                 }
             } else {
@@ -168,6 +214,14 @@ public class BeatBlockBoardView extends View {
     }
 
     /* Public methods */
+
+    public void setScore(TextView score) {
+        this.score = score;
+    }
+
+    public void setHighScore(TextView highScore) {
+        this.highScore = highScore;
+    }
 
     /**
      * Moves the block at index i up

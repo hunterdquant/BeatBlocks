@@ -1,8 +1,12 @@
 package group.cs242.beatblocks;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * @author Hunter Quant <quanthd@clarkson.edu> <hunterdquant@gmail.com>
@@ -11,6 +15,8 @@ import java.util.Random;
  */
 public class BeatBlockBoard extends GameBoard {
 
+    private ScoreUpdateListener listener;
+
     /* constructors */
     public BeatBlockBoard(int size) {
         board = new byte[width = size][height = size];
@@ -18,6 +24,14 @@ public class BeatBlockBoard extends GameBoard {
     }
 
     /* public methods */
+
+    public int getPoints(Set<Index> set) {
+        return 10*set.size()*set.size();
+    }
+
+    public void setListener(ScoreUpdateListener sul) {
+        this.listener = sul;
+    }
 
     /**
      *
@@ -156,8 +170,8 @@ public class BeatBlockBoard extends GameBoard {
      * Finds all matches of 3+ on the game board.
      */
     @Override
-    public List<Index> checkMatches() {
-        List<Index> matchedIndices = new ArrayList<Index>();
+    public Set<Index> checkMatches() {
+        Set<Index> matchedIndices = new HashSet<Index>();
         try {
             //Add all indices in a 3+ match.
             for (int i = 0; i < board.length; i++) {
@@ -192,7 +206,7 @@ public class BeatBlockBoard extends GameBoard {
      * Sets all matched indices to zero, then calls for a repopulate.
      */
     @Override
-    public void removeMatches(List<Index> matchedIndices) {
+    public void removeMatches(Set<Index> matchedIndices) {
         if (matchedIndices.size() == 0) {
             return;
         }
@@ -203,6 +217,9 @@ public class BeatBlockBoard extends GameBoard {
         } catch (Exception e) {
             System.err.println("Unexpected error");
             e.printStackTrace();
+        }
+        if (listener != null) {
+            listener.updateScore(matchedIndices);
         }
     }
 

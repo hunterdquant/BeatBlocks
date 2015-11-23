@@ -44,6 +44,8 @@ public class GameActivity extends AppCompatActivity {
         beatBlockBoardView = (BeatBlockBoardView)mainLayout.findViewById(R.id.beat_block_board_view);
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
         beatBlockBoardView.setDimensions(p.x, p.y);
+        beatBlockBoardView.setScore((TextView) mainLayout.findViewById(R.id.score));
+        beatBlockBoardView.setHighScore((TextView) mainLayout.findViewById(R.id.high_score));
 
         beatMapView = (BeatMapView)mainLayout.findViewById(R.id.beat_map_view);
         beatMapView.setUp(song);
@@ -137,22 +139,22 @@ public class GameActivity extends AppCompatActivity {
             // The index to move is the initial events x/y divided by the dimensions of the square.
             Index moveIndex = new Index((int)e1.getX()/blockSize, (int)e1.getY()/blockSize);
             // Move in the appropriate direction if the user swiped a distance of 100 px.
-           // if(beatMapView.isGoodMove()) {
+            //if(beatMapView.isGoodMove()) {
                 if (Math.abs(e1.getX() - e2.getX()) >= Math.abs(e1.getY() - e2.getY())) {
-                    if (e1.getX() - e2.getX() <= -blockSize/2) {
+                    if (e1.getX() - e2.getX() <= -blockSize / 2) {
                         beatBlockBoardView.moveBlockRight(moveIndex);
-                    } else if (e1.getX() - e2.getX() >= blockSize/2) {
+                    } else if (e1.getX() - e2.getX() >= blockSize / 2) {
                         beatBlockBoardView.moveBlockLeft(moveIndex);
                     }
                 } else {
-                    if (e1.getY() - e2.getY() >= blockSize/2) {
+                    if (e1.getY() - e2.getY() >= blockSize / 2) {
                         beatBlockBoardView.moveBlockUp(moveIndex);
-                    } else if (e1.getY() - e2.getY() <= -blockSize/2){
+                    } else if (e1.getY() - e2.getY() <= -blockSize / 2) {
                         beatBlockBoardView.moveBlockDown(moveIndex);
                     }
                 }
                 return true;
-           //} else {
+            //} else {
                // Log.i("Move", "Not good");
            // }
             //return false;

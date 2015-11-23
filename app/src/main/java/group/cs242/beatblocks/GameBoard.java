@@ -1,6 +1,7 @@
 package group.cs242.beatblocks;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Hunter Quant <quanthd@clarkson.edu> <hunterdquant@gmail.com>
@@ -16,6 +17,6 @@ abstract class GameBoard {
     /* protected abstract methods */
 
     public abstract void populate();
-    public abstract List<Index> checkMatches();
-    public abstract void removeMatches(List<Index> matchedIndices);
+    public abstract Set<Index> checkMatches();
+    public abstract void removeMatches(Set<Index> matchedIndices);
 }

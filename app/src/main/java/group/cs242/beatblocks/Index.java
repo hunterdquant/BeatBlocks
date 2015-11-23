@@ -42,4 +42,15 @@ public class Index {
 
         return y;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Index) {
+            Index i = (Index)obj;
+            if (i.getY() == getY() && i.getX() == getX()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
