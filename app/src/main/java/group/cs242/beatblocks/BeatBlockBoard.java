@@ -6,9 +6,12 @@ import java.util.Set;
 
 /**
  * This class serves as a backend framework for the interactive game board for Beat Blocks.
+ *
  * @author Hunter Quant
  */
 public class BeatBlockBoard extends GameBoard {
+
+    /* data members */
 
     /**
      * An action listener for updating game score.
@@ -191,7 +194,7 @@ public class BeatBlockBoard extends GameBoard {
         return board[i.getX()][i.getY()];
     }
 
-    /* Protected methods */
+    /* protected methods */
 
     /**
      * Finds all matches of 3+ on the game board.

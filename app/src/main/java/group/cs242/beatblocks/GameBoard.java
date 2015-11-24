@@ -3,9 +3,9 @@ package group.cs242.beatblocks;
 import java.util.Set;
 
 /**
- * @author Hunter Quant <quanthd@clarkson.edu> <hunterdquant@gmail.com>
- *
  * Serves as a template for game boards.
+ *
+ * @author Hunter Quant
  */
 abstract class GameBoard {
 

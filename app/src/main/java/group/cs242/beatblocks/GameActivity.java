@@ -13,7 +13,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * The activity that is run to play the game.
+ *
+ * @author Hunter Quant
+ * @author Cameron Icso
+ */
+
 public class GameActivity extends AppCompatActivity {
+
+    /* data members */
 
     /**
      * The file name to store preferences to.
@@ -44,6 +53,8 @@ public class GameActivity extends AppCompatActivity {
      * The song to be played.
      */
     private Song song;
+
+    /* protected methods */
 
     /**
      * Called on activity creation.
@@ -149,7 +160,7 @@ public class GameActivity extends AppCompatActivity {
      */
     class MoveGestureListener extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
 
-        /* Data members */
+        /* data members */
 
         /**
          * The GestureDetector
@@ -161,7 +172,7 @@ public class GameActivity extends AppCompatActivity {
          */
         Context context;
 
-        /* Constructors */
+        /* constructors */
 
         /**
          * The default constructor for a MoveGestureListener.
