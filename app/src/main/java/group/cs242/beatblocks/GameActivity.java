@@ -1,8 +1,8 @@
 package group.cs242.beatblocks;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +16,13 @@ import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
 
+    private static final String PREF_FILE_NAME = "PreferencesFile";
+
     // The view to be drawn to the screen
     private BeatBlockBoardView beatBlockBoardView;
 
+    private TextView highScore;
+    private ImageButton imgButton;
 
     //requirements for the whole BeatMap
     private BeatMapView beatMapView; //Work on trimming down possibly
@@ -40,12 +44,21 @@ public class GameActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View mainLayout = inflater.inflate(R.layout.game_activity, null);
 
+        SharedPreferences preferences = getSharedPreferences(PREF_FILE_NAME, 0);
+        SharedPreferences.Editor preferencesEditor = preferences.edit();
+        if (!preferences.contains("highScore")) {
+            preferencesEditor.putString("highScore", "High Score: 0");
+            preferencesEditor.commit();
+        }
+        highScore = (TextView) mainLayout.findViewById(R.id.high_score);
+        highScore.setText(preferences.getString("highScore", "High Score: 0"));
+
         // Retrieve and setup the beatBlockBoardView.
         beatBlockBoardView = (BeatBlockBoardView)mainLayout.findViewById(R.id.beat_block_board_view);
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
         beatBlockBoardView.setDimensions(p.x, p.y);
         beatBlockBoardView.setScore((TextView) mainLayout.findViewById(R.id.score));
-        beatBlockBoardView.setHighScore((TextView) mainLayout.findViewById(R.id.high_score));
+        beatBlockBoardView.setHighScore(highScore);
 
         beatMapView = (BeatMapView)mainLayout.findViewById(R.id.beat_map_view);
         beatMapView.setUp(song);
@@ -56,7 +69,7 @@ public class GameActivity extends AppCompatActivity {
         TextView title = (TextView) mainLayout.findViewById(R.id.title);
         title.setText("Beat Blocks");
         // Retrieve, scale, and set the on click function of the image button.
-        final ImageButton imgButton = (ImageButton) mainLayout.findViewById(R.id.pauseButton);
+        imgButton = (ImageButton) mainLayout.findViewById(R.id.pauseButton);
         imgButton.setScaleX(2);
         imgButton.setScaleY(2);
         imgButton.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +102,17 @@ public class GameActivity extends AppCompatActivity {
         if (!beatBlockBoardView.isPaused()) {
             beatBlockBoardView.togglePause();
             beatMapView.togglePause();
+            imgButton.setImageResource(R.mipmap.play);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences preferences = getSharedPreferences(PREF_FILE_NAME, 0);
+        SharedPreferences.Editor preferencesEditor = preferences.edit();
+        preferencesEditor.putString("highScore", highScore.getText().toString());
+        preferencesEditor.commit();
     }
 
     /**

@@ -77,20 +77,7 @@ public class BeatBlockBoardView extends View {
         beatBlockBoard.setListener(new ScoreUpdateListener() {
             @Override
             public void updateScore(final Set<Index> set) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            updateScores(set);
-                            Log.i("Listener", "Called");
-                        } catch (NumberFormatException nfe) {
-                            nfe.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-
+                updateScores(set);
             }
         });
     }
