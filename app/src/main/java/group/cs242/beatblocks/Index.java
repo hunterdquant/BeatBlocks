@@ -10,6 +10,7 @@ public class Index {
     /* data members */
     private int x;
     private int y;
+    private int id;
 
     /* constructors */
 
@@ -21,6 +22,7 @@ public class Index {
     public Index(int x, int y) {
         this.x = x;
         this.y = y;
+        id = calcId();
     }
 
     /* public methods */
@@ -52,5 +54,20 @@ public class Index {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    /* private methods */
+
+    private int calcId() {
+        int n = 1;
+        while (n < y) {
+            n *= 10;
+        }
+        return n*x + y;
     }
 }
