@@ -1,49 +1,77 @@
 package group.cs242.beatblocks;
 
-import android.util.Log;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 /**
- * @author Hunter Quant <quanthd@clarkson.edu> <hunterdquant@gmail.com>
- *
  * This class serves as a backend framework for the interactive game board for Beat Blocks.
+ * @author Hunter Quant
  */
 public class BeatBlockBoard extends GameBoard {
 
+    /**
+     * An action listener for updating game score.
+     */
     private ScoreUpdateListener listener;
 
     /* constructors */
+
+    /**
+     * The default constructor for a BeatBlockBoard.
+     */
+    public BeatBlockBoard() {
+        this(5);
+    }
+
+    /**
+     * Constructs a BeatBlockBoard object with the specified size.
+     *
+     * @param size - The size of the board.
+     */
     public BeatBlockBoard(int size) {
-        board = new byte[width = size][height = size];
+        this.size = size;
+        board = new byte[size][size];
         populate();
     }
 
     /* public methods */
 
+    /**
+     * Gets the calculated points of a move.
+     *
+     * @param set - The set of blocks in a move.
+     * @return The calculated points.
+     */
     public int getPoints(Set<Index> set) {
         return 10*set.size()*set.size();
     }
 
+    /**
+     * Sets the action listener.
+     *
+     * @param sul - The action listener for updating the score.
+     */
     public void setListener(ScoreUpdateListener sul) {
         this.listener = sul;
     }
 
     /**
+     * Moves the block at index i up.
      *
      * @param i - The index to move up.
      */
     public void moveBlockUp(Index i) {
+
+        // Return if the bounds aren't valid
         if (!validBounds(i)) {
             return;
         }
         if (i.getY() - 1 < 0) {
             return;
         }
+
+        // Move the specified index up.
         try {
             byte temp = board[i.getX()][i.getY()-1];
             board[i.getX()][i.getY()-1] = board[i.getX()][i.getY()];
@@ -52,10 +80,10 @@ public class BeatBlockBoard extends GameBoard {
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
-        checkMatches();
     }
 
     /**
+     * Moves the block at index i right.
      *
      * @param i - The index to move right.
      */
@@ -74,11 +102,11 @@ public class BeatBlockBoard extends GameBoard {
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
-        checkMatches();
     }
 
 
     /**
+     * Moves the block at index i down.
      *
      * @param i - The index to move down.
      */
@@ -97,10 +125,10 @@ public class BeatBlockBoard extends GameBoard {
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
-        checkMatches();
     }
 
     /**
+     * Moves the block at index i left.
      *
      * @param i - The index to move left.
      */
@@ -119,7 +147,6 @@ public class BeatBlockBoard extends GameBoard {
             System.err.println("Unexpected error");
             e.printStackTrace();
         }
-        checkMatches();
     }
 
     /**
@@ -148,14 +175,14 @@ public class BeatBlockBoard extends GameBoard {
 
 
     /**
-     *
      * @return The size of the board.
      */
     public int getBoardSize() {
-        return width;
+        return size;
     }
 
     /**
+     *  Gets the value stored at an index.
      *
      * @param i - the index to retrieve the value from.
      * @return The value at the index i.
@@ -201,9 +228,9 @@ public class BeatBlockBoard extends GameBoard {
     }
 
     /**
-     * @param matchedIndices - A list of element indices to remove.
-     *
      * Sets all matched indices to zero, then calls for a repopulate.
+     *
+     * @param matchedIndices - A list of element indices to remove.
      */
     @Override
     public void removeMatches(Set<Index> matchedIndices) {
@@ -219,13 +246,14 @@ public class BeatBlockBoard extends GameBoard {
             e.printStackTrace();
         }
         if (listener != null) {
-            listener.updateScore(matchedIndices);
+            listener.updateScore(getPoints(matchedIndices));
         }
     }
 
     /* private methods */
 
     /**
+     * Determines whether a passed index is valid.
      *
      * @param i - an index to check for validity.
      * @return true if it's a valid index.
@@ -233,8 +261,7 @@ public class BeatBlockBoard extends GameBoard {
     private boolean validBounds (Index i) {
         if (i.getX() < 0 || i.getY() > board.length - 1) {
             return false;
-        }
-        if (i.getY() < 0 || i.getX() > board.length - 1) {
+        } else if (i.getY() < 0 || i.getX() > board.length - 1) {
             return false;
         }
         return true;

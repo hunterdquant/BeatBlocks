@@ -1,20 +1,35 @@
 package group.cs242.beatblocks;
 
 /**
- * @author Hunter Quant <quanthd@clarkson.edu> <hunterdquant@gmail.com>
+ * Serves as a pair (x, y) for indices of a 2D array.
  *
- * Serves as a pair of points for indices of a 2D array.
+ * @author Hunter Quant
  */
 public class Index {
 
     /* data members */
-    private int x;
-    private int y;
+
+    /**
+     * The x and y index or coordinate.
+     */
+    private int x, y;
+
+    /**
+     * The unique id of a point
+     */
     private int id;
 
     /* constructors */
 
     /**
+     * Default constructor for the Index class.
+     */
+    public Index() {
+        this(0, 0);
+    }
+
+    /**
+     * Constructs a Index object with the specified point (x, y)
      *
      * @param x - the x index
      * @param y - the y index
@@ -28,23 +43,25 @@ public class Index {
     /* public methods */
 
     /**
-     *
      * @return the x position of the index.
      */
     public int getX() {
-
         return x;
     }
 
     /**
-     *
      * @return the y position of the array.
      */
     public int getY() {
-
         return y;
     }
 
+    /**
+     * Checks if 2 Index objects are equal.
+     *
+     * @param obj - an object to compare to.
+     * @return True if the two Index objects are equal
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Index) {
@@ -56,6 +73,9 @@ public class Index {
         return false;
     }
 
+    /**
+     * @return The unique Index id as the hash code.
+     */
     @Override
     public int hashCode() {
         return id;
@@ -63,6 +83,15 @@ public class Index {
 
     /* private methods */
 
+    /**
+     * Calculates the unique Index id.
+     *
+     * <p>
+     *     The id is the x concatenated with the y value.
+     * </p>
+     *
+     * @return the index id.
+     */
     private int calcId() {
         int n = 1;
         while (n < y) {

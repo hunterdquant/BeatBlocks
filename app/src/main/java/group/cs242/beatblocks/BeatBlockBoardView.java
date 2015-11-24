@@ -6,47 +6,67 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Hunter on 11/3/2015.
+ * A view object for displaying the gameboard.
+ *
+ * <p>
+ *     Handles the drawing of the gameboard and updating score information from the gameboard.
+ * </p>
+ *
+ * @author Hunter Quant
  */
 public class BeatBlockBoardView extends View {
 
     /* Data members */
 
-    // The game board.
+    /**
+     * The constant representing board size.
+     */
+    private final int BOARD_SIZE = 5;
+
+    /**
+     * The BeatBlockBoard to serve as the game backend.
+     */
     private BeatBlockBoard beatBlockBoard;
-    // Status flag
+
+    /**
+     * A status flag for whether new blocks can be poplulated.
+     */
     private boolean canPopulate = true;
-    // Pause status flag.
+
+    /**
+     * A status flag for whether the game is paused for not
+     */
     private boolean paused = false;
-    // Pixel dimensions of the blocks and board.
-    private int blockDimensions;
-    private int dimensions;
-    // An array of bitmaps. Their array index is matched with a value in beatBlockBoard.
+
+    /**
+     * The dimensions in pixels of a block/board.
+     */
+    private int blockDimensions, dimensions;
+
+    /**
+     * An array for storing the block bitmap tiles.
+     */
     private Bitmap[] bitmaps = new Bitmap[6];
 
-    private TextView score;
-    private TextView highScore;
+    /**
+     * References to the score views that belong the the parent activity.
+     */
+    private TextView score, highScore;
 
 
     /* Constructor */
 
     /**
-     *  Constructor for object creation without xml.
+     * Constructor for object creation without xml.
      *
-     * @param context - The current context.
+     * @param context - The context
+     * @param width - the device width
+     * @param height- the device height
      */
     public BeatBlockBoardView(Context context, int width, int height) {
         super(context);
@@ -54,7 +74,7 @@ public class BeatBlockBoardView extends View {
         // The shorter of width and height/2 is the size.
         dimensions = width > height/2 ? height/2 : width;
         // 5 blocks per board.
-        blockDimensions = dimensions/5;
+        blockDimensions = dimensions/BOARD_SIZE;
 
         // Initialize the bitmaps.
         bitmaps[0] = getBitmap(R.mipmap.blackblock);
@@ -65,7 +85,7 @@ public class BeatBlockBoardView extends View {
         bitmaps[5] = getBitmap(R.mipmap.redblock);
 
         // Initialize the board and populate it.
-        beatBlockBoard = new BeatBlockBoard(5);
+        beatBlockBoard = new BeatBlockBoard(BOARD_SIZE);
         beatBlockBoard.populate();
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
 
@@ -74,10 +94,12 @@ public class BeatBlockBoardView extends View {
             beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
             beatBlockBoard.populate();
         }
+
+        // Listener for updating the score views when a combo is made.
         beatBlockBoard.setListener(new ScoreUpdateListener() {
             @Override
-            public void updateScore(final Set<Index> set) {
-                updateScores(set);
+            public void updateScore(final int points) {
+                updateScores(points);
             }
         });
     }
@@ -104,8 +126,10 @@ public class BeatBlockBoardView extends View {
             a.recycle();
         }
 
+        // Set the dimensions to which ever is shorter between width and height/2.
         dimensions = width > height/2 ? height/2 : width;
-        blockDimensions = dimensions/5;
+        // The board
+        blockDimensions = dimensions/BOARD_SIZE;
 
         bitmaps[0] = getBitmap(R.mipmap.blackblock);
         bitmaps[1] = getBitmap(R.mipmap.yellowblock);
@@ -114,29 +138,50 @@ public class BeatBlockBoardView extends View {
         bitmaps[4] = getBitmap(R.mipmap.blueblock);
         bitmaps[5] = getBitmap(R.mipmap.redblock);
 
-        beatBlockBoard = new BeatBlockBoard(5);
+        beatBlockBoard = new BeatBlockBoard(BOARD_SIZE);
         beatBlockBoard.populate();
         beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
 
+        // Remove all matches before starting.
         while (beatBlockBoard.checkMatches().size() != 0) {
             beatBlockBoard.removeMatches(beatBlockBoard.checkMatches());
             beatBlockBoard.populate();
         }
 
+        // Listener for updating the score views when a combo is made.
         beatBlockBoard.setListener(new ScoreUpdateListener() {
+
+            /**
+             * Calls the score update function.
+             *
+             * @param points - The points to be added to the score.
+             */
             @Override
-            public void updateScore(final Set<Index> set) {
-                updateScores(set);
+            public void updateScore(final int points) {
+                updateScores(points);
             }
         });
     }
 
-    private void updateScores(Set<Index> set) {
-        int additionalPoints = beatBlockBoard.getPoints(set);
+    /**
+     * Updates the total score.
+     *
+     * <p>
+     *     The score is calculated using the BeatBlockBoard function getPoints.
+     *     The score text fields of the parent activity are then updated with the new score.
+     * </p>
+     *
+     * @param additionalPoints - The amount of points to add to the score.
+     */
+    private void updateScores(int additionalPoints) {
+
+        // Parse the current score text.
         String[] s = score.getText().toString().trim().split(" ");
+        // Calculate the total points.
         int totalPoints = (Integer.parseInt(s[1]) + additionalPoints);
         CharSequence newScore = s[0] + " " + totalPoints;
 
+        // Assign the new score. If the new score is greater than the highscore, update the highscore.
         String[] hs = highScore.getText().toString().trim().split(" ");
         if (totalPoints >= Integer.parseInt(hs[2])) {
             CharSequence newHighScore = hs[0] + " " + hs[1] + " " + totalPoints;
@@ -150,12 +195,21 @@ public class BeatBlockBoardView extends View {
     /**
      * Draws all the bitmaps in a grid.
      *
+     * <p>
+     *     Draws all blocks on the screen in a BOARD_SIZE * BOARD_SIZE grid.
+     *     If the game is paused the board is not drawn.
+     * </p>
+     *
      * @param canvas - canvas to draw elements upon.
      */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        // Don't draw if the game is paused.
         if (!paused) {
+
+            // Draw the grid of blocks.
             for (int i = 0; i < beatBlockBoard.getBoardSize(); i++) {
                 for (int j = 0; j < beatBlockBoard.getBoardSize(); j++) {
                     int bitMapVal = beatBlockBoard.getValAtIndex(new Index(i, j));
@@ -192,8 +246,8 @@ public class BeatBlockBoardView extends View {
     /**
      * Defines the dimensions of the view.
      *
-     * @param widthMeasureSpec
-     * @param heightMeasureSpec
+     * @param widthMeasureSpec - Device specified view width
+     * @param heightMeasureSpec - Device specified view height
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -202,10 +256,20 @@ public class BeatBlockBoardView extends View {
 
     /* Public methods */
 
+    /**
+     * Sets the score field to the passed parameter.
+     *
+     * @param score - A TextView to be updated.
+     */
     public void setScore(TextView score) {
         this.score = score;
     }
 
+    /**
+     * Sets the highScore field to the passed parameter.
+     *
+     * @param highScore - A TextView to be updated.
+     */
     public void setHighScore(TextView highScore) {
         this.highScore = highScore;
     }
@@ -272,9 +336,12 @@ public class BeatBlockBoardView extends View {
     }
 
     /**
-     * Sets the dimensions of the blocks and board. Has to be called
-     * because you can not get the screen dimensions through xml.
-     * Also reloads the bitmaps.
+     * Sets the dimensions of the blocks and board.
+     * <p>
+     *     Has to be called
+     *     because you can not get the screen dimensions through xml.
+     *     Also reloads the bitmaps.
+     * </p>
      *
      * @param width - the new width
      * @param height - the new height
@@ -294,14 +361,13 @@ public class BeatBlockBoardView extends View {
     /* Private methods */
 
     /**
+     *  Loads and scales the specified image.
      *
-     * @param imgId - the id og an image resource.
+     * @param imgId - the id of an image resource.
      * @return The loaded bitmap.
      */
     private Bitmap getBitmap(int imgId) {
         // Load and scale the bitmaps.
         return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), imgId), blockDimensions, blockDimensions, false);
     }
-
-
 }

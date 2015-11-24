@@ -1,6 +1,5 @@
 package group.cs242.beatblocks;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,12 +10,35 @@ import java.util.Set;
 abstract class GameBoard {
 
     /* data members */
-    public int width, height;
+
+    /**
+     * The size of the game board.
+     */
+    public int size;
+
+    /**
+     * The 2D array representation of the board.
+     */
     protected byte [][] board;
 
-    /* protected abstract methods */
+    /* public abstract methods */
 
+    /**
+     * populates a game board.
+     */
     public abstract void populate();
+
+    /**
+     * Gets all indices of a match.
+     *
+     * @return The set of indices.
+     */
     public abstract Set<Index> checkMatches();
+
+    /**
+     * Removes all matched indices.
+     *
+     * @param matchedIndices - set of matched indices
+     */
     public abstract void removeMatches(Set<Index> matchedIndices);
 }

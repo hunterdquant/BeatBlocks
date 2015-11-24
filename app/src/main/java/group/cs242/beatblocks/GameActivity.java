@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,18 +15,41 @@ import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
 
+    /**
+     * The file name to store preferences to.
+     */
     private static final String PREF_FILE_NAME = "PreferencesFile";
 
-    // The view to be drawn to the screen
+    /**
+     * The board to be drawn to the screen.
+     */
     private BeatBlockBoardView beatBlockBoardView;
 
+    /**
+     * Reference to the highscore TextView.
+     */
     private TextView highScore;
+
+    /**
+     * Reference to the pause status image button.
+     */
     private ImageButton imgButton;
 
-    //requirements for the whole BeatMap
+    /**
+     * The beat map to be drawn to the screen.
+     */
     private BeatMapView beatMapView; //Work on trimming down possibly
+
+    /**
+     * The song to be played.
+     */
     private Song song;
 
+    /**
+     * Called on activity creation.
+     *
+     * @param savedInstanceState - saved instance.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,19 +59,21 @@ public class GameActivity extends AppCompatActivity {
         Point p = new Point();
         getWindowManager().getDefaultDisplay().getSize(p);
 
+        // Load the song.
         song = new Song(getApplicationContext(), 90);
-
 
         // Inflate the layout.
         LayoutInflater inflater = LayoutInflater.from(this);
         View mainLayout = inflater.inflate(R.layout.game_activity, null);
 
+        // Get stored highscore data.
         SharedPreferences preferences = getSharedPreferences(PREF_FILE_NAME, 0);
         SharedPreferences.Editor preferencesEditor = preferences.edit();
         if (!preferences.contains("highScore")) {
             preferencesEditor.putString("highScore", "High Score: 0");
             preferencesEditor.commit();
         }
+        // Set the displayed highscore.
         highScore = (TextView) mainLayout.findViewById(R.id.high_score);
         highScore.setText(preferences.getString("highScore", "High Score: 0"));
 
@@ -60,14 +84,15 @@ public class GameActivity extends AppCompatActivity {
         beatBlockBoardView.setScore((TextView) mainLayout.findViewById(R.id.score));
         beatBlockBoardView.setHighScore(highScore);
 
+        // Retrieve and setup the beatMapView.
         beatMapView = (BeatMapView)mainLayout.findViewById(R.id.beat_map_view);
         beatMapView.setUp(song);
+        beatMapView.run();
 
-        // Set the content as the layout.
-        setContentView(mainLayout);
         //Set the title
         TextView title = (TextView) mainLayout.findViewById(R.id.title);
         title.setText("Beat Blocks");
+
         // Retrieve, scale, and set the on click function of the image button.
         imgButton = (ImageButton) mainLayout.findViewById(R.id.pauseButton);
         imgButton.setScaleX(2);
@@ -90,7 +115,8 @@ public class GameActivity extends AppCompatActivity {
         img.setScaleX(2);
         img.setScaleY(2);
 
-        beatMapView.run();
+        // Set the content as the layout.
+        setContentView(mainLayout);
     }
 
     /**
@@ -106,6 +132,9 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Open closing the application store the highscore data.
+     */
     @Override
     protected void onStop() {
         super.onStop();
@@ -122,19 +151,40 @@ public class GameActivity extends AppCompatActivity {
 
         /* Data members */
 
+        /**
+         * The GestureDetector
+         */
         private GestureDetector gd;
+
+        /**
+         * The context
+         */
         Context context;
 
         /* Constructors */
 
+        /**
+         * The default constructor for a MoveGestureListener.
+         */
         public MoveGestureListener() {
             super();
         }
 
+        /**
+         * Constructs a MoveGestureListener with the current context.
+         *
+         * @param context - the context.
+         */
         public MoveGestureListener(Context context) {
             this(context, null);
         }
 
+        /**
+         * Constructs a MoveGestureListener with the current context and GestureDetector.
+         *
+         * @param context - the context.
+         * @param gd - the passed GestureDetector.
+         */
         public MoveGestureListener(Context context, GestureDetector gd) {
             if (gd == null) {
                 this.gd = new GestureDetector(context, this);
@@ -193,12 +243,10 @@ public class GameActivity extends AppCompatActivity {
          */
         @Override
         public boolean onDown(MotionEvent e) {
-
             return true;
         }
 
         /**
-         *
          * @param v - the attached view.
          * @param e - An event.
          * @return a boolean.
