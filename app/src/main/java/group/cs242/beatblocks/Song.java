@@ -8,15 +8,34 @@ import android.util.Log;
 import java.io.IOException;
 
 /**
- * Created by Cameron on 11/16/2015.
+ * @author Cameron Icso
+ *
+ * Contains information about the song to be played as well as housing the MediaPlayer
  */
 public class Song implements MediaPlayer.OnPreparedListener {
+
+    //Data Members
+    /**
+     * The context used when retrieving the Audio File
+     */
     Context context;
+    /**
+     * Integer representing the Beats per Minute of the song
+     */
     int beats_per_minute;
-    long song_length;
+    /**
+     * The MediaPlayer that is in charge of managing the song
+     */
     MediaPlayer player;
 
     //Constructor
+
+    /**
+     * Constructor that initializes the data members
+     *
+     * @param c - the context of where the song will be retrieved from
+     * @param bpm - beats per minute of the song to be played
+     */
     public Song(Context c, int bpm)
     {
         beats_per_minute = bpm;
@@ -27,7 +46,11 @@ public class Song implements MediaPlayer.OnPreparedListener {
 
     //Methods
 
-    //Sets up and prepares the media player
+    /**
+     * Attempts to set up and prepare the MediaPlayer from a given source file in the raw folder.
+     *
+     * If setting up the data source fails, will print an error to the log
+     */
     public void play()
     {
         try
@@ -43,11 +66,17 @@ public class Song implements MediaPlayer.OnPreparedListener {
         }
         catch (IOException e)
         {
-            Log.d("Error", "in setDataSource method");
+            Log.e("Error", "in setDataSource method");
         }
     }
 
-    //When the media player is prepared, the song will start
+    /**
+     *
+     * @param mp - the MediaPlayer that will be listened for
+     *
+     * Will be called automatically  if the MediaPlayer contained within the object is prepared
+     *           successfully in the play() method
+     */
     @Override public void onPrepared(MediaPlayer mp)
     {
         mp.start();

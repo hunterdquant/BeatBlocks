@@ -86,8 +86,6 @@
         android:id="@+id/beat_map_view"
         custom:width_screen="1080"
         custom:height_screen="1920"
-        custom:accepting_color="-16776961"
-        custom:beat_color= "-256"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/beat_block_board_view"
         android:layout_marginBottom="45dp"/>

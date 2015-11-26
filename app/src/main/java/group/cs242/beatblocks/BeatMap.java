@@ -1,37 +1,96 @@
 package group.cs242.beatblocks;
 
 import android.graphics.Rect;
-import android.os.SystemClock;
 import android.os.Handler;
 
 
 
 /**
- * @author Cameron Icso <icsoc@clarkson.edu> <icsoc22@gmail.com>
+ * @author Cameron Icso
  *
  * Defines the specifications for the Beat Map displayed in game
  */
 public class BeatMap{
 
     //Data Members
-    Beat beats[];    //contains all of the beats that will be used throughout a game
-    Rect accepting_range;  //an unmoving Rectangle the will represent when a move can be made
+    /**
+     * An array of the Beats that will be used
+     */
+    Beat beats[];
+    /**
+     * an unmoving Rectangle that represents when a move can be made
+     */
+    Rect accepting_range;
+    /**
+     * an unmoving Rectangle that will create a border around the Beats and Accepting Range
+     */
     Rect border;
+    /**
+     * The top border of the Beats and Rectangles
+     */
     int top;
+    /**
+     * The bottom border of the Beats and Rectangles
+     */
     int bottom;
+    /**
+     * The width of each of the beats
+     */
     int beat_width;
+    /**
+     * The width of the view where the BeatMap will be displayed
+     */
     int width;
+    /**
+     * The height of the view where the BeatMap will be displayed
+     */
     int height;
-    int total_beats; //to be used in loops
+    /**
+     * The milliseconds per beat of the song, used for Animation of the beats
+     */
     long milliseconds_per_beat;
+    /**
+     * A constant for how long one beat will take to get from start to finish
+     * Also represents the amount of beats that will be created
+     */
     final int duration_constant = 10;
+    /**
+     * The Song associated with the BeatMap
+     */
     Song song;
 
 
+    //Constructors
+
+    /**
+     * Constructor given a width and a height
+     *
+     * initializes the width, height, top, bottom, beat width, accepting range, and border
+     *
+     * @param w - the width of the view
+     * @param h - the height of the view
+     */
+    BeatMap(int w, int h)
+    {
+        width = w;
+        height = h;
+        top = height-300;
+        bottom = height;
+        beat_width = (int) ((float)width/27);
+        accepting_range = new Rect(width - 200, top, width, bottom);
+        border = new Rect(0, top, width, bottom);
+
+    }
 
     //Methods
-    public boolean isGoodMove() //To be called whenever a move is made. Will return true if there
-    {                           //is a beat that has not been used in the accepting range
+
+    /**
+     * @return If a beat is within the accepting range and not used yet
+     *
+     * Will set the beat's used to true if that beat is used in the move
+     */
+    public boolean isGoodMove()
+    {
         for(int i = 0; i < duration_constant; i++)
         {
             if ((beats[i].getUsed() == false) &&
@@ -43,7 +102,12 @@ public class BeatMap{
         }
         return false;
     }
-    private void createBeats() //Called in the constructor, creates the Beats array
+
+    /**
+     * Called in a constructor with a Song or the setUp(Song) method
+     * Creates the beats array and initializes each Beat
+     */
+    private void createBeats()
     {
         beats = new Beat[duration_constant];
         for(int i = 0; i < duration_constant; i++)
@@ -53,11 +117,12 @@ public class BeatMap{
         }
     }
 
-
-    void run() //Runs the animation of all of the beats
+    /**
+     * Runs the animation of all of the beats as well as playing the song
+     */
+    void run()
     {
         Handler handler = new Handler();
-        //song.play();
         for (int i = 0; i < duration_constant; i++) {
             beats[i].Animate();
         }
@@ -67,11 +132,14 @@ public class BeatMap{
             public void run() {
                 song.play();
             }
-        }, 9*milliseconds_per_beat);
+        }, 9 * milliseconds_per_beat);
 
 
     }
 
+    /**
+     * Updates the top, bottom, accepting range, border, and beats
+     */
     void setUp()
     {
         top = height-300;
@@ -85,43 +153,23 @@ public class BeatMap{
         border.right = width;
         for (int i = 0; i < duration_constant; i++) {
             beats[i].update(top, bottom);
+            beats[i].centAnim.setIntValues(beats[i].cent, width + beat_width/2);
         }
     }
 
 
-    
+    /**
+     * @param sng - the song to be used in the BeatMap
+     *
+     * Initializes the song, milliseconds per beat, and creates the beat array
+     */
     void setUp(Song sng)
     {
         song = sng;
-        total_beats = (int) (song.beats_per_minute * song.song_length);
         milliseconds_per_beat = (long) 60000 / song.beats_per_minute;
         createBeats();
 }
 
-    //Constructor
-
-    BeatMap(int w, int h)
-    {
-        width = w;
-        height = h;
-        top = height-300;
-        bottom = height;
-        beat_width = (int) ((float)width/27);
-        accepting_range = new Rect(width - 200, top, width, bottom);
-        border = new Rect(0, top, width, bottom);
-
-    }
-
-
-    //Requires a beats per minute and song length in minutes
-    BeatMap(Song sng)
-    {
-        song = sng;
-        milliseconds_per_beat = (long) 60000 / song.beats_per_minute;
-        createBeats();
-
-
-    }
 
 
 
