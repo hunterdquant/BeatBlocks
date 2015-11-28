@@ -16,14 +16,25 @@ public class StartScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Inflate the layout.
         LayoutInflater inflater = LayoutInflater.from(this);
         View startLayout = inflater.inflate(R.layout.start_screen_activity, null);
-        ImageButton imgButton = (ImageButton) startLayout.findViewById(R.id.playButton);
-        imgButton.setOnClickListener(new View.OnClickListener() {
+
+        ImageButton playButton = (ImageButton) startLayout.findViewById(R.id.playButton);
+        playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageButton helpButton = (ImageButton) startLayout.findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), HelpActivity.class);
                 startActivity(i);
             }
         });

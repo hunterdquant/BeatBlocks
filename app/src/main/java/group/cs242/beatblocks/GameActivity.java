@@ -164,7 +164,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * Open closing the application store the highscore data.
+     * Open closing the application store the high score data.
      */
     @Override
     protected void onStop() {
