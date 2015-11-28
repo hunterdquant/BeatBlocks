@@ -1,12 +1,14 @@
 package group.cs242.beatblocks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,6 +56,23 @@ public class GameActivity extends AppCompatActivity {
      * The song to be played.
      */
     private Song song;
+
+    /* public methods */
+
+    /**
+     * Closes the game activity upon pressing the back button.
+     *
+     * @param keyCode - The value of the pressed key.
+     * @param ke - The key event.
+     * @return The value returned by the parent classes method.
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent ke) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, ke);
+    }
 
     /* protected methods */
 

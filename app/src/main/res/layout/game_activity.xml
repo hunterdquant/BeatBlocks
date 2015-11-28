@@ -88,6 +88,6 @@
         custom:height_screen="1920"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/beat_block_board_view"
-        android:layout_marginBottom="45dp"/>
+        android:layout_below="@id/high_score"/>
 
 </RelativeLayout>
