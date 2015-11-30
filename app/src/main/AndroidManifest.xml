@@ -22,8 +22,8 @@
         </activity>
         <activity
             android:name=".StartScreenActivity"
-            android:screenOrientation="portrait"
-            android:label="Beat Blocks">
+            android:label="Beat Blocks"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,8 +32,12 @@
         </activity>
         <activity
             android:name=".HelpActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_help" >
+            android:label="@string/title_activity_help"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".GameOverActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

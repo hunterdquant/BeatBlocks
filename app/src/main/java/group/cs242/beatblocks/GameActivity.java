@@ -1,6 +1,7 @@
 package group.cs242.beatblocks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -41,6 +42,11 @@ public class GameActivity extends AppCompatActivity {
     private TextView highScore;
 
     /**
+     * Reference to the misses TextView
+     */
+    private TextView misses;
+
+    /**
      * Reference to the pause status image button.
      */
     private ImageButton imgButton;
@@ -54,6 +60,11 @@ public class GameActivity extends AppCompatActivity {
      * The song to be played.
      */
     private Song song;
+
+    /**
+     * The number of missed beats.
+     */
+    private volatile int missedBeats = 0;
 
     /* public methods */
 
@@ -93,7 +104,7 @@ public class GameActivity extends AppCompatActivity {
 
         // Inflate the layout.
         LayoutInflater inflater = LayoutInflater.from(this);
-        View mainLayout = inflater.inflate(R.layout.game_activity, null);
+        View gameLayout = inflater.inflate(R.layout.game_activity, null);
 
         // Get stored highscore data.
         SharedPreferences preferences = getSharedPreferences(PREF_FILE_NAME, 0);
@@ -103,27 +114,29 @@ public class GameActivity extends AppCompatActivity {
             preferencesEditor.commit();
         }
         // Set the displayed highscore.
-        highScore = (TextView) mainLayout.findViewById(R.id.high_score);
+        highScore = (TextView) gameLayout.findViewById(R.id.high_score);
         highScore.setText(preferences.getString("highScore", "High Score: 0"));
 
+        misses = (TextView) gameLayout.findViewById(R.id.misses);
+
         // Retrieve and setup the beatBlockBoardView.
-        beatBlockBoardView = (BeatBlockBoardView)mainLayout.findViewById(R.id.beat_block_board_view);
+        beatBlockBoardView = (BeatBlockBoardView) gameLayout.findViewById(R.id.beat_block_board_view);
         beatBlockBoardView.setOnTouchListener(new MoveGestureListener(this));
         beatBlockBoardView.setDimensions(p.x, p.y);
-        beatBlockBoardView.setScore((TextView) mainLayout.findViewById(R.id.score));
+        beatBlockBoardView.setScore((TextView) gameLayout.findViewById(R.id.score));
         beatBlockBoardView.setHighScore(highScore);
 
         // Retrieve and setup the beatMapView.
-        beatMapView = (BeatMapView)mainLayout.findViewById(R.id.beat_map_view);
+        beatMapView = (BeatMapView) gameLayout.findViewById(R.id.beat_map_view);
         beatMapView.setUp(song);
         beatMapView.run();
 
         //Set the title
-        TextView title = (TextView) mainLayout.findViewById(R.id.title);
+        TextView title = (TextView) gameLayout.findViewById(R.id.title);
         title.setText("Beat Blocks");
 
         // Retrieve, scale, and set the on click function of the image button.
-        imgButton = (ImageButton) mainLayout.findViewById(R.id.pauseButton);
+        imgButton = (ImageButton) gameLayout.findViewById(R.id.pauseButton);
         imgButton.setScaleX(2);
         imgButton.setScaleY(2);
         imgButton.setOnClickListener(new View.OnClickListener() {
@@ -140,12 +153,12 @@ public class GameActivity extends AppCompatActivity {
         });
 
         // Retrieve and scale the image.
-        ImageView img = (ImageView) mainLayout.findViewById(R.id.gameIcon);
+        ImageView img = (ImageView) gameLayout.findViewById(R.id.gameIcon);
         img.setScaleX(2);
         img.setScaleY(2);
 
         // Set the content as the layout.
-        setContentView(mainLayout);
+        setContentView(gameLayout);
     }
 
     /**
@@ -237,29 +250,47 @@ public class GameActivity extends AppCompatActivity {
             if (beatBlockBoardView.isPaused()) {
                 return false;
             }
+
             int blockSize = beatBlockBoardView.getBlockDimensions();
             // The index to move is the initial events x/y divided by the dimensions of the square.
             Index moveIndex = new Index((int)e1.getX()/blockSize, (int)e1.getY()/blockSize);
-            // Move in the appropriate direction if the user swiped a distance of 100 px.
-            //if(beatMapView.isGoodMove()) {
-                if (Math.abs(e1.getX() - e2.getX()) >= Math.abs(e1.getY() - e2.getY())) {
-                    if (e1.getX() - e2.getX() <= -blockSize / 2) {
-                        beatBlockBoardView.moveBlockRight(moveIndex);
-                    } else if (e1.getX() - e2.getX() >= blockSize / 2) {
-                        beatBlockBoardView.moveBlockLeft(moveIndex);
+
+            // Thread for checking if moves are made while a beat is in the accepting region.
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!beatMapView.isGoodMove()) {
+                        missedBeats++;
                     }
-                } else {
-                    if (e1.getY() - e2.getY() >= blockSize / 2) {
-                        beatBlockBoardView.moveBlockUp(moveIndex);
-                    } else if (e1.getY() - e2.getY() <= -blockSize / 2) {
-                        beatBlockBoardView.moveBlockDown(moveIndex);
+                    // If they have used all their misses end the activity.
+                    if (missedBeats >= 3) {
+                        Intent i = new Intent(getApplicationContext(), GameOverActivity.class);
+                        startActivity(i);
+                        finish();
                     }
                 }
-                return true;
-            //} else {
-               // Log.i("Move", "Not good");
-           // }
-            //return false;
+            });
+
+            // Move in the appropriate direction if the user swiped a distance of 100 px.
+            if (Math.abs(e1.getX() - e2.getX()) >= Math.abs(e1.getY() - e2.getY())) {
+                if (e1.getX() - e2.getX() <= -blockSize / 2) {
+                    t.start();
+                    beatBlockBoardView.moveBlockRight(moveIndex);
+                } else if (e1.getX() - e2.getX() >= blockSize / 2) {
+                    t.start();
+                    beatBlockBoardView.moveBlockLeft(moveIndex);
+                }
+            } else {
+                if (e1.getY() - e2.getY() >= blockSize / 2) {
+                    t.start();
+                    beatBlockBoardView.moveBlockUp(moveIndex);
+                } else if (e1.getY() - e2.getY() <= -blockSize / 2) {
+                    t.start();
+                    beatBlockBoardView.moveBlockDown(moveIndex);
+                }
+            }
+            misses.setText("Misses: " + missedBeats);
+            return true;
         }
 
 
@@ -282,7 +313,6 @@ public class GameActivity extends AppCompatActivity {
          */
         @Override
         public boolean onTouch(View v, MotionEvent e) {
-
             return gd.onTouchEvent(e);
         }
     }

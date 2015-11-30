@@ -48,6 +48,22 @@
         android:layout_below="@id/score"/>
 
     <TextView
+        android:id="@+id/misses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textAllCaps="true"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:text="Misses: 0"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="20dp"
+        android:fontFamily="roboto"
+        android:layout_below="@id/high_score"/>
+
+
+    <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

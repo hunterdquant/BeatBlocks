@@ -12,6 +12,6 @@
     <string name="bullet_one">\u2022 Make matches of 3 or more to remove a block and gain points.</string>
     <string name="bullet_two">\u2022 To make a successful move you must move a block while
                             a beat is in the accepting region of the beat map.</string>
-    <string name="bullet_three">\u2022 If you miss 3 beat it\'s game over!</string>
+    <string name="bullet_three">\u2022 If you miss 3 beats it\'s game over!</string>
     <string name="bullet_four">\u2022 Have fun!</string>
 </resources>

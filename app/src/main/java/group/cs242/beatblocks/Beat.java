@@ -117,7 +117,6 @@ public class Beat implements ValueAnimator.AnimatorUpdateListener{
                 used = false;
             else ;//lose
         }
-
     }
 
     /**

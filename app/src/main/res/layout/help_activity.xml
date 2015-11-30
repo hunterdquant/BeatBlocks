@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/welcome"
+        android:fontFamily="roboto"
         android:id="@+id/welcomeView"
         android:textStyle="bold"
         android:layout_below="@+id/backButton"
@@ -28,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/about"
+        android:fontFamily="roboto"
         android:id="@+id/aboutView"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/welcomeView"
@@ -37,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/how_to"
+        android:fontFamily="roboto"
         android:id="@+id/howToView"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
@@ -47,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bullet_one"
+        android:fontFamily="roboto"
         android:id="@+id/bulletOneView"
         android:layout_below="@+id/howToView"
         android:layout_alignParentStart="true" />
@@ -55,6 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bullet_two"
+        android:fontFamily="roboto"
         android:id="@+id/bulletTwoView"
         android:layout_below="@+id/bulletOneView"
         android:layout_alignParentStart="true" />
@@ -63,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bullet_three"
+        android:fontFamily="roboto"
         android:id="@+id/bulletThreeView"
         android:layout_below="@+id/bulletTwoView"
         android:layout_alignParentStart="true" />
@@ -71,6 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bullet_four"
+        android:fontFamily="roboto"
         android:id="@+id/bulletFourView"
         android:layout_below="@+id/bulletThreeView"
         android:layout_alignParentStart="true" />
