@@ -55,7 +55,7 @@ public class Beat implements ValueAnimator.AnimatorUpdateListener{
         width = w;
         beat_width = bw;
         used = false;
-        cent = beat_width/2;
+        cent = -beat_width/2;
         centAnim = new ValueAnimator();
         centAnim.setIntValues(cent, width + beat_width/2);
         centAnim.setInterpolator(null);

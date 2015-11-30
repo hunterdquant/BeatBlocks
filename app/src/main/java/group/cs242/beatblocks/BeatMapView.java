@@ -34,6 +34,13 @@ public class BeatMapView extends View {
      * Whether or not the BeatMap should be paused
      */
     private boolean paused = false;
+    /**
+     * Whether or not the song thread has to be resumed
+     */
+    private boolean need_resumed = false;
+
+
+
 
     /**
      * Constructor used for defining via xml
@@ -124,7 +131,12 @@ public class BeatMapView extends View {
      if(paused == false)
      {
          paused = true;
-         bmap.song.player.pause();
+         if(!bmap.song.player.isPlaying())
+         {
+             bmap.handler.removeCallbacks(bmap.runner);
+            need_resumed = true;
+         }
+         else bmap.song.player.pause();
          for(int i = 0; i < bmap.duration_constant; i++)
          {
              bmap.beats[i].centAnim.pause();
@@ -134,7 +146,15 @@ public class BeatMapView extends View {
         else if (paused == true)
      {
         paused = false;
-         bmap.song.player.start();
+         if(need_resumed)
+         {
+             long resume_delay = (bmap.duration_constant - 1)*bmap.milliseconds_per_beat*
+                     (((bmap.accepting_range.right+bmap.accepting_range.left)/2)-((bmap.beats[0].rectangle.right + bmap.beats[0].rectangle.left)/2))
+                     /(bmap.width+bmap.beat_width/2);
+             bmap.handler.postDelayed(bmap.runner, resume_delay);
+             need_resumed = false;
+         }
+         else bmap.song.player.start();
          for(int i = 0; i < bmap.duration_constant; i++)
          {
              bmap.beats[i].centAnim.resume();
