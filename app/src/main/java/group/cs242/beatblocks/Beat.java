@@ -111,11 +111,9 @@ public class Beat implements ValueAnimator.AnimatorUpdateListener{
         rectangle.right = ((Integer) centAnim.getAnimatedValue()) + beat_width/2;
         rectangle.left = ((Integer) centAnim.getAnimatedValue()) - beat_width/2;
 
-        if(rectangle.left == width)
+        if(rectangle.right < width - 200)
         {
-            if (used == true)
-                used = false;
-            else ;//lose
+            used = false;
         }
     }
 
