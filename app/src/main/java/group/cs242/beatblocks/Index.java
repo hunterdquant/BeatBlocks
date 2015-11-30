@@ -84,19 +84,16 @@ public class Index {
     /* private methods */
 
     /**
-     * Calculates the unique Index id.
+     * Calculates the semi-unique Index id.
      *
      * <p>
      *     The id is the x concatenated with the y value.
+     *     This is only unique for the purposes of this game and doesn't scale with board size > 10.
      * </p>
      *
      * @return the index id.
      */
     private int calcId() {
-        int n = 1;
-        while (n < y) {
-            n *= 10;
-        }
-        return n*x + y;
+        return 10*x + y;
     }
 }
