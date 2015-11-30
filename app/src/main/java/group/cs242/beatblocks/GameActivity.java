@@ -15,9 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * The activity that is run to play the game.
  *
@@ -52,7 +49,7 @@ public class GameActivity extends AppCompatActivity {
     /**
      * The beat map to be drawn to the screen.
      */
-    private BeatMapView beatMapView; //Work on trimming down possibly
+    private BeatMapView beatMapView;
 
     /**
      * The song to be played.
@@ -63,18 +60,6 @@ public class GameActivity extends AppCompatActivity {
      * The number of missed beats.
      */
     private volatile int missedBeats = 0;
-
-    /**
-     * Timer for updating the missed beats text view.
-     */
-    private Timer timer = new Timer();
-
-    /**
-     * The timer thread for updating the missed beats text view.
-     */
-    private TimerTask timerTask;
-
-    private TextView misses;
 
     /* public methods */
 
