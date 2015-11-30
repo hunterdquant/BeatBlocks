@@ -58,7 +58,19 @@ public class BeatMap{
      * The Song associated with the BeatMap
      */
     Song song;
-
+    /**
+     * Used to delay the start of the song
+     */
+    Handler handler = new Handler();
+    /**
+     * In charge of starting the song
+     */
+    Runnable runner = new Runnable() {
+        @Override
+        public void run() {
+            song.play();
+        }
+    };
 
     //Constructors
 
@@ -122,17 +134,12 @@ public class BeatMap{
      */
     void run()
     {
-        Handler handler = new Handler();
+
         for (int i = 0; i < duration_constant; i++) {
             beats[i].Animate();
         }
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                song.play();
-            }
-        }, 9 * milliseconds_per_beat);
+        handler.postDelayed(runner, (duration_constant - 1) * milliseconds_per_beat);
 
 
     }
