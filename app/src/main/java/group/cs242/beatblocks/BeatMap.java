@@ -53,7 +53,7 @@ public class BeatMap{
      * A constant for how long one beat will take to get from start to finish
      * Also represents the amount of beats that will be created
      */
-    final int duration_constant = 5;
+    final int duration_constant = 4;
     /**
      * The Song associated with the BeatMap
      */

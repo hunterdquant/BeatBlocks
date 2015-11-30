@@ -65,7 +65,7 @@ public class BeatMapView extends View {
 
         bmap = new BeatMap(width, height);
         paintA.setColor(Color.GREEN);
-        paintB.setColor(Color.BLACK);
+        paintB.setColor(Color.WHITE);
         paintC.setColor(Color.BLACK);
         paintC.setStyle(Paint.Style.STROKE);
         paintC.setStrokeWidth(10);

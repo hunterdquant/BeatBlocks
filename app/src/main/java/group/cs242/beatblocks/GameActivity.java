@@ -15,6 +15,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * The activity that is run to play the game.
  *
@@ -42,11 +45,6 @@ public class GameActivity extends AppCompatActivity {
     private TextView highScore;
 
     /**
-     * Reference to the misses TextView
-     */
-    private TextView misses;
-
-    /**
      * Reference to the pause status image button.
      */
     private ImageButton imgButton;
@@ -65,6 +63,18 @@ public class GameActivity extends AppCompatActivity {
      * The number of missed beats.
      */
     private volatile int missedBeats = 0;
+
+    /**
+     * Timer for updating the missed beats text view.
+     */
+    private Timer timer = new Timer();
+
+    /**
+     * The timer thread for updating the missed beats text view.
+     */
+    private TimerTask timerTask;
+
+    private TextView misses;
 
     /* public methods */
 
@@ -100,7 +110,7 @@ public class GameActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getSize(p);
 
         // Load the song.
-        song = new Song(getApplicationContext(), 90);
+        song = new Song(getApplicationContext(), 45);
 
         // Inflate the layout.
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -117,7 +127,28 @@ public class GameActivity extends AppCompatActivity {
         highScore = (TextView) gameLayout.findViewById(R.id.high_score);
         highScore.setText(preferences.getString("highScore", "High Score: 0"));
 
-        misses = (TextView) gameLayout.findViewById(R.id.misses);
+        final TextView misses = (TextView) gameLayout.findViewById(R.id.misses);
+
+        // The misses text view needs to be threaded to update properly.
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(250);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                misses.setText("Misses: " + missedBeats);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
 
         // Retrieve and setup the beatBlockBoardView.
         beatBlockBoardView = (BeatBlockBoardView) gameLayout.findViewById(R.id.beat_block_board_view);
@@ -185,6 +216,8 @@ public class GameActivity extends AppCompatActivity {
         preferencesEditor.putString("highScore", highScore.getText().toString());
         preferencesEditor.commit();
     }
+
+
 
     /**
      * Handles touch events for the game view.
@@ -289,7 +322,6 @@ public class GameActivity extends AppCompatActivity {
                     beatBlockBoardView.moveBlockDown(moveIndex);
                 }
             }
-            misses.setText("Misses: " + missedBeats);
             return true;
         }
 
