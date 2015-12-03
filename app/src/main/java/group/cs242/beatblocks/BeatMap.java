@@ -97,7 +97,7 @@ public class BeatMap{
     //Methods
 
     /**
-     * @return If a beat is within the accepting range and not used yet
+     * @return If the part of a beat is in the accepting range and not used yet
      *
      * Will set the beat's used to true if that beat is used in the move
      */
