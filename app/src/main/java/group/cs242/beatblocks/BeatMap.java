@@ -89,7 +89,7 @@ public class BeatMap{
         top = height-300;
         bottom = height;
         beat_width = (int) ((float)width/27);
-        accepting_range = new Rect(width - 200, top, width, bottom);
+        accepting_range = new Rect(width - 200, top, width+beat_width, bottom);
         border = new Rect(0, top, width, bottom);
 
     }
@@ -106,7 +106,7 @@ public class BeatMap{
         for(int i = 0; i < duration_constant; i++)
         {
             if ((beats[i].getUsed() == false) &&
-                    (accepting_range.contains(beats[i].rectangle)))
+                    (beats[i].rectangle.right>accepting_range.left))
             {
                 beats[i].setUsed(true);
                 return true;
