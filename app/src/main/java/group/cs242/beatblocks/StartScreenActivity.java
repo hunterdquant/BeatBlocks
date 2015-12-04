@@ -45,7 +45,6 @@ public class StartScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), HelpActivity.class);
                 startActivity(i);
-                finish();
             }
         });
 
