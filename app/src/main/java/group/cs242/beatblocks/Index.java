@@ -88,7 +88,7 @@ public class Index {
      *
      * <p>
      *     The id is the x concatenated with the y value.
-     *     This is only unique for the purposes of this game and doesn't scale with board size > 10.
+     *     This is only unique for the purposes of this game and doesn't scale with board size greater than 10.
      * </p>
      *
      * @return the index id.
