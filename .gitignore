@@ -26,6 +26,3 @@ proguard/
 # Log Files
 *.log
 
-workspace.xml
-*.ims
-tasks.xml
